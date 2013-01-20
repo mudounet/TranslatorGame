@@ -12,7 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 public class SelectActivity extends Activity {
-	
+
 	Button button;
 
 	@Override
@@ -34,7 +34,7 @@ public class SelectActivity extends Activity {
 		final Context context = this;
 
 		button = (Button) findViewById(R.id.selectTest);
-		
+
 		button.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -46,6 +46,5 @@ public class SelectActivity extends Activity {
 			}
 
 		});
-
 	}
 }
