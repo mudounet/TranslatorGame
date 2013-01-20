@@ -1,0 +1,57 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TestActivity" >
+
+    <TextView
+        android:id="@+id/question"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:hint="Question auquel il faut répondre"
+        android:padding="10dp"
+        android:text="Ceci est le texte de ma question"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/proposal"
+        android:layout_width="fill_parent"
+        android:padding="10dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/question" />
+
+    <TextView
+        android:id="@+id/answer"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/proposal"
+        android:hint="Ceci est ma réponse"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/validate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/answer"
+        android:layout_below="@id/answer"
+        android:padding="10dp"
+        android:text="Validate"
+        android:width="100dp" />
+
+    <Button
+        android:id="@+id/skip"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/validate"
+        android:layout_toLeftOf="@id/validate"
+        android:clickable="false"
+        android:enabled="false"
+        android:padding="10dp"
+        android:text="Skip" />
+
+</RelativeLayout>
