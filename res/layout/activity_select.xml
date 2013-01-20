@@ -4,4 +4,14 @@
     android:layout_height="match_parent"
     tools:context=".SelectActivity" >
 
+    <Button
+        android:id="@+id/selectTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/SelectLesson" />
+
 </RelativeLayout>
