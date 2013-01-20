@@ -13,25 +13,33 @@
         android:hint="Question auquel il faut répondre"
         android:padding="10dp"
         android:text="Ceci est le texte de ma question"
-        android:textStyle="bold"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/proposal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/question"
+        android:hint="5 characters"
         android:inputType="textNoSuggestions"
         android:padding="10dp" />
 
-    <TextView
-        android:id="@+id/answer"
+    <com.mudounet.FlowLayout
+        android:id="@+id/layout_proposal"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp"
-        android:layout_alignParentRight="true"
         android:layout_below="@id/proposal"
+        android:layout_marginLeft="5dip" />
+
+    <TextView
+        android:id="@+id/answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/layout_proposal"
         android:hint="Ceci est ma réponse"
+        android:padding="10dp"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
