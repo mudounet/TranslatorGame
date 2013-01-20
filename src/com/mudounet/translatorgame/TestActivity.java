@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Typeface;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -82,6 +83,7 @@ public class TestActivity extends Activity {
 			FilterArray[0] = new InputFilter.LengthFilter(maxLength);
 			btnTag.setFilters(FilterArray);
 			btnTag.setHint(generateHint(maxLength));
+			btnTag.setTypeface(Typeface.DEFAULT);
 
 			// btnTag.setPadding(0, 0, 0, 0);
 			layout.addView(btnTag);
@@ -98,7 +100,7 @@ public class TestActivity extends Activity {
 	}
 
 	private void addListeners() {
-		proposal = (EditText) findViewById(R.id.proposal);
+		//proposal = (EditText) findViewById(R.id.proposal);
 		validateButton = (Button) findViewById(R.id.validate);
 		answer = (TextView) findViewById(R.id.answer);
 		question = (TextView) findViewById(R.id.question);
@@ -113,46 +115,5 @@ public class TestActivity extends Activity {
 		 * count) { Log.i("test", s.toString() + "/" + start + " / " + before);
 		 * } });
 		 */
-		proposal.addTextChangedListener(new MaskedWatcher("(###) ###-##-##"));
-	}
-
-	private void populateLinearLayout(LinearLayout ll, List<View> collection) {
-
-		Display display = getWindowManager().getDefaultDisplay();
-		// int maxWidth = ll.getWidth();
-		int maxWidth = display.getWidth();
-		ll.removeAllViews();
-
-		if (collection.size() > 0) {
-			Log.i("test", "begin");
-			LinearLayout llAlso = new LinearLayout(this);
-			llAlso.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-					LayoutParams.WRAP_CONTENT));
-			llAlso.setOrientation(LinearLayout.HORIZONTAL);
-
-			int widthSoFar = 0;
-			for (View item : collection) {
-
-				item.measure(0, 0);
-				int widthOfElement = item.getMeasuredWidth();
-
-				if (widthSoFar + widthOfElement >= maxWidth) {
-					ll.addView(llAlso);
-					widthSoFar = 0;
-
-					llAlso = new LinearLayout(this);
-					llAlso.setLayoutParams(new LayoutParams(
-							LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
-					llAlso.setOrientation(LinearLayout.HORIZONTAL);
-					Log.i("test", "New line");
-				}
-
-				Log.i("test", item.toString());
-				llAlso.addView(item);
-				widthSoFar += widthOfElement;
-			}
-
-			ll.addView(llAlso);
-		}
 	}
 }
