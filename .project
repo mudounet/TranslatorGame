@@ -3,6 +3,7 @@
 	<name>TranslatorGame</name>
 	<comment></comment>
 	<projects>
+		<project>TranslatorGameJava</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -42,6 +42,7 @@ public class TestActivity extends Activity {
 	Button validateButton;
 	EditText proposal;
 	int errorColor = Color.argb(50, 255, 0, 0);
+	boolean statIsInserted = false;
 	TextView question;
 	private static final Logger Logger = LoggerFactory
 			.getLogger(TestActivity.class);
@@ -57,7 +58,7 @@ public class TestActivity extends Activity {
 			Logger.error("Current langage : " + curLangage);
 
 			Toast toast = Toast.makeText(this,
-					"Incorrect langage for this activity", Toast.LENGTH_SHORT);
+					"Incorrect langage for this activity", Toast.LENGTH_LONG);
 			toast.show();
 		} else {
 			setContentView(R.layout.activity_test);
@@ -103,6 +104,7 @@ public class TestActivity extends Activity {
 	private void setNewTest() throws MalFormedSentence {
 		sentence = lesson.getNextSentence();
 
+		statIsInserted = false;
 		buildQuestion(sentence);
 		buildProposal(sentence);
 		buildSolution(null);
@@ -116,10 +118,10 @@ public class TestActivity extends Activity {
 
 	/**
 	 * Called when the user touches the button
-	 * 
-	 * @throws MalFormedSentence
+	 * @throws Exception 
+	 * @throws IOException 
 	 */
-	public void validateProposal(View view) throws MalFormedSentence {
+	public void validateProposal(View view) throws IOException, Exception {
 		Logger.debug("Validating proposal");
 		ArrayList<AnswerFragment> arrayList = sentence.getAnswerList();
 		FlowLayout layout = (FlowLayout) findViewById(R.id.layout_proposal);
@@ -138,6 +140,14 @@ public class TestActivity extends Activity {
 		CharSequence text;
 
 		int result = sentence.getResults();
+		float resultAsPerc = sentence.getResultAsPerc();
+		
+		if(!statIsInserted) {
+			sentence.addResult(resultAsPerc);
+			lesson.saveStats(writeStats("lessons.stats"));
+			statIsInserted = true;
+		}
+		
 		if (result == 0) {
 			text = "No errors found";
 			setNewTest();
@@ -145,7 +155,7 @@ public class TestActivity extends Activity {
 			text = "You made " + result + " errors";
 			buildSolution(sentence);
 		}
-
+		
 		Toast toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
 		toast.show();
 	}
