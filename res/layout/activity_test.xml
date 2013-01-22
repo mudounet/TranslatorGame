@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_layout_id"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".TestActivity" >
@@ -10,35 +11,43 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:hint="Question auquel il faut répondre"
         android:padding="10dp"
         android:text="Ceci est le texte de ma question"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textStyle="bold" />
 
-    <com.mudounet.FlowLayout
-        android:id="@+id/layout_proposal"
+    <FrameLayout
+        android:id="@+id/layout_proposal_frame"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/question"
-        android:layout_marginLeft="5dip" />
+        android:padding="10dp" >
 
-    <TextView
-        android:id="@+id/answer"
-        android:layout_width="wrap_content"
+        <com.mudounet.FlowLayout
+            android:id="@+id/layout_proposal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/layout_answer_frame"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/layout_proposal"
-        android:hint="Ceci est ma réponse"
-        android:padding="10dp"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_below="@id/layout_proposal_frame"
+        android:padding="10dp" >
+
+        <com.mudounet.FlowLayout
+            android:id="@+id/answer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
 
     <Button
         android:id="@+id/validate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@id/answer"
-        android:layout_below="@id/answer"
+        android:layout_alignRight="@id/layout_answer_frame"
+        android:layout_below="@id/layout_answer_frame"
         android:padding="10dp"
         android:text="Validate"
         android:width="100dp" />

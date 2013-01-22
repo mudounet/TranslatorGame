@@ -1,39 +1,48 @@
 package com.mudounet.translatorgame;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-import com.mudounet.FlowLayout;
-import com.mudounet.translatorgame.R;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.Typeface;
-import android.text.Editable;
+import android.os.Bundle;
+import android.os.Environment;
 import android.text.InputFilter;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Display;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.mudounet.FlowLayout;
+import com.mudounet.core.AnswerFragment;
+import com.mudounet.core.Lesson;
+import com.mudounet.core.MalFormedSentence;
+import com.mudounet.core.Sentence;
 
 public class TestActivity extends Activity {
 
+	Lesson lesson;
+	Sentence sentence;
 	Button validateButton;
 	EditText proposal;
-	TextView answer;
+	int errorColor = Color.argb(50, 255, 0, 0);
 	TextView question;
+	private static final Logger Logger = LoggerFactory
+			.getLogger(TestActivity.class);
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,14 +52,24 @@ public class TestActivity extends Activity {
 		String curLangage = res.getConfiguration().locale.getCountry();
 
 		if (curLangage != "RU") {
-			Log.i("test", "Current langage : " + curLangage);
+			Logger.debug("Current langage : " + curLangage);
 			startActivityForResult(new Intent(
 					android.provider.Settings.ACTION_LOCALE_SETTINGS), 0);
 		}
 
 		setContentView(R.layout.activity_test);
 		addListeners();
-		buildSentence();
+		try {
+			initializeTestActivity();
+		} catch (Exception e) {
+			Logger.error("Error while loading activity : " + e.toString());
+		}
+		try {
+			setNewTest();
+		} catch (MalFormedSentence e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -60,35 +79,128 @@ public class TestActivity extends Activity {
 		return true;
 	}
 
-	private void buildSentence() {
+	private void initializeTestActivity() throws Exception {
+		Logger.debug("Trying to retrieve XML file");
+		InputStream istr = getAssets().open("lessons.xml");
+
+		Logger.debug("Loading file onto memory");
+		lesson = new Lesson(istr);
+		
+		Logger.debug("Loading stats file");
+		lesson.loadStats(loadStats("lessons.stats"));
+
+		Logger.debug("Writing stats file");
+		FileOutputStream outputStream = writeStats("lessons.stats");
+		lesson.saveStats(outputStream);
+
+		Logger.debug("Initialization finished");
+	}
+	
+	private void setNewTest() throws MalFormedSentence {
+		sentence = lesson.getNextSentence();
+		
+		//RelativeLayout activityLayout = (RelativeLayout) findViewById(R.id.activity_layout_id);
+
+		buildQuestion(sentence);
+		buildProposal(sentence);
+		buildSolution(sentence);
+		//activityLayout.invalidate();
+	}
+	
+	private void buildQuestion(Sentence sentence) {
+		question = (TextView) findViewById(R.id.question);
+		question.setText(sentence.getTest().getQuestion());
+	}
+
+	private void buildProposal(Sentence sentence) throws MalFormedSentence {
+		ArrayList<AnswerFragment> arrayList = sentence.getAnswerList();
 		FlowLayout layout = (FlowLayout) findViewById(R.id.layout_proposal);
-		// layout.setOrientation(LinearLayout.HORIZONTAL);
-		// layout.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-		// LayoutParams.WRAP_CONTENT));
+		layout.removeAllViews();
 
-		List<View> list = new ArrayList<View>();
-		for (int i = 1; i < 10; i++) {
-			EditText btnTag = new EditText(this);
-			// Button btnTag = new Button(this);
-			// btnTag.setLayoutParams(new
-			// LayoutParams(LayoutParams.WRAP_CONTENT,
-			// LayoutParams.WRAP_CONTENT));
-			btnTag.setText("");
-			btnTag.setId(100 + i);
-			btnTag.setInputType(android.text.InputType.TYPE_CLASS_TEXT
-					| android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+		int i = 0;
+		for (AnswerFragment fragment : arrayList) {
+			if(fragment.getFragmentType() == AnswerFragment.CONSTANT_FRAGMENT) {
+				TextView statText = new TextView(this);
+				statText.setText(fragment.getQuestion());
+				statText.setId(100 + i);
+				statText.setTypeface(Typeface.DEFAULT);
+				layout.addView(statText);
+			} else {
+				EditText btnTag = new EditText(this);
+				btnTag.setText("");
+				btnTag.setId(100 + i);
+				btnTag.setInputType(android.text.InputType.TYPE_CLASS_TEXT
+						| android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 
-			int maxLength = i;
-			InputFilter[] FilterArray = new InputFilter[1];
-			FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-			btnTag.setFilters(FilterArray);
-			btnTag.setHint(generateHint(maxLength));
-			btnTag.setTypeface(Typeface.DEFAULT);
+				int maxLength = fragment.getQuestion().length();
+				InputFilter[] FilterArray = new InputFilter[1];
+				FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+				btnTag.setFilters(FilterArray);
+				btnTag.setHint(generateHint(maxLength));
+				btnTag.setTypeface(Typeface.DEFAULT);
 
-			// btnTag.setPadding(0, 0, 0, 0);
-			layout.addView(btnTag);
+				layout.addView(btnTag);
+			}
+			i++;
 		}
-		// this.populateLinearLayout(layout, list);
+	}
+
+	private void buildSolution(Sentence sentence) throws MalFormedSentence {
+		FlowLayout layout = (FlowLayout) findViewById(R.id.answer);
+		ArrayList<AnswerFragment> arrayList = sentence.getAnswerList();
+		layout.removeAllViews();
+
+		int i = 0;
+		for (AnswerFragment fragment : arrayList) {
+			TextView statText = new TextView(this);
+			statText.setText(fragment.getQuestion());
+			statText.setId(2000 + i);
+			statText.setTypeface(Typeface.DEFAULT);
+			//statText.setHeight(70);
+			statText.setPadding(1, 1, 1, 1);
+			
+			if(fragment.getFragmentType() == AnswerFragment.EDITABLE_FRAGMENT && fragment.getResult() > 0) {
+				statText.setBackgroundColor(this.errorColor);
+			} 
+			layout.addView(statText);
+			i++;
+		}
+	}
+	
+	private FileInputStream loadStats(String filename) throws IOException {
+		File sdCard = Environment.getExternalStorageDirectory();
+		File dir = new File(sdCard.getAbsolutePath() + "/TranslatorGame");
+		dir.mkdirs();
+		Logger.debug("Continue");
+		File file = new File(dir, filename);
+		if (file.exists() && !file.canWrite())
+			throw new IOException("Cannot write to system : "+ file.getAbsolutePath());
+
+		if (!file.isFile()) {
+			Logger.debug("Continue 1");
+			file.createNewFile(); // Exception here
+			Logger.debug("Continue 2");
+		}
+
+		return new FileInputStream(file);
+	}
+	
+	private FileOutputStream writeStats(String filename) throws IOException {
+		File sdCard = Environment.getExternalStorageDirectory();
+		File dir = new File(sdCard.getAbsolutePath() + "/TranslatorGame");
+		dir.mkdirs();
+		Logger.debug("Continue");
+		File file = new File(dir, filename);
+		if (file.exists() && !file.canWrite())
+			throw new IOException("Cannot write to system : "+ file.getAbsolutePath());
+
+		if (!file.isFile()) {
+			Logger.debug("Continue 1");
+			file.createNewFile(); // Exception here
+			Logger.debug("Continue 2");
+		}
+
+		return new FileOutputStream(file);
 	}
 
 	private String generateHint(int maxNumbers) {
@@ -100,10 +212,10 @@ public class TestActivity extends Activity {
 	}
 
 	private void addListeners() {
-		//proposal = (EditText) findViewById(R.id.proposal);
+		// proposal = (EditText) findViewById(R.id.proposal);
 		validateButton = (Button) findViewById(R.id.validate);
-		answer = (TextView) findViewById(R.id.answer);
 		question = (TextView) findViewById(R.id.question);
+
 		/*
 		 * proposal.addTextChangedListener(new TextWatcher() { public void
 		 * afterTextChanged(Editable s) { answer.setText(s.length() + " / "); }
