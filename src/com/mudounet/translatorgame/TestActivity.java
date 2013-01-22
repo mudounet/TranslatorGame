@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -26,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mudounet.FlowLayout;
 import com.mudounet.core.AnswerFragment;
@@ -51,24 +53,26 @@ public class TestActivity extends Activity {
 		Resources res = getResources();
 		String curLangage = res.getConfiguration().locale.getCountry();
 
-		if (curLangage != "RU") {
-			Logger.debug("Current langage : " + curLangage);
-			startActivityForResult(new Intent(
-					android.provider.Settings.ACTION_LOCALE_SETTINGS), 0);
-		}
+		if (!curLangage.equalsIgnoreCase("RU")) {
+			Logger.error("Current langage : " + curLangage);
 
-		setContentView(R.layout.activity_test);
-		addListeners();
-		try {
-			initializeTestActivity();
-		} catch (Exception e) {
-			Logger.error("Error while loading activity : " + e.toString());
-		}
-		try {
-			setNewTest();
-		} catch (MalFormedSentence e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Toast toast = Toast.makeText(this,
+					"Incorrect langage for this activity", Toast.LENGTH_SHORT);
+			toast.show();
+		} else {
+			setContentView(R.layout.activity_test);
+			addListeners();
+			try {
+				initializeTestActivity();
+			} catch (Exception e) {
+				Logger.error("Error while loading activity : " + e.toString());
+			}
+			try {
+				setNewTest();
+			} catch (MalFormedSentence e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -85,7 +89,7 @@ public class TestActivity extends Activity {
 
 		Logger.debug("Loading file onto memory");
 		lesson = new Lesson(istr);
-		
+
 		Logger.debug("Loading stats file");
 		lesson.loadStats(loadStats("lessons.stats"));
 
@@ -95,21 +99,55 @@ public class TestActivity extends Activity {
 
 		Logger.debug("Initialization finished");
 	}
-	
+
 	private void setNewTest() throws MalFormedSentence {
 		sentence = lesson.getNextSentence();
-		
-		//RelativeLayout activityLayout = (RelativeLayout) findViewById(R.id.activity_layout_id);
 
 		buildQuestion(sentence);
 		buildProposal(sentence);
-		buildSolution(sentence);
-		//activityLayout.invalidate();
+		buildSolution(null);
+
 	}
-	
+
 	private void buildQuestion(Sentence sentence) {
 		question = (TextView) findViewById(R.id.question);
 		question.setText(sentence.getTest().getQuestion());
+	}
+
+	/**
+	 * Called when the user touches the button
+	 * 
+	 * @throws MalFormedSentence
+	 */
+	public void validateProposal(View view) throws MalFormedSentence {
+		Logger.debug("Validating proposal");
+		ArrayList<AnswerFragment> arrayList = sentence.getAnswerList();
+		FlowLayout layout = (FlowLayout) findViewById(R.id.layout_proposal);
+
+		int fragIdx = 0;
+		for (AnswerFragment fragment : arrayList) {
+			if (fragment.getFragmentType() == AnswerFragment.EDITABLE_FRAGMENT) {
+				String enteredText = ((EditText) layout.getChildAt(fragIdx))
+						.getText().toString();
+				fragment.setAnswer(enteredText);
+			}
+			fragIdx++;
+		}
+
+		// Context context = getApplicationContext();
+		CharSequence text;
+
+		int result = sentence.getResults();
+		if (result == 0) {
+			text = "No errors found";
+			setNewTest();
+		} else {
+			text = "You made " + result + " errors";
+			buildSolution(sentence);
+		}
+
+		Toast toast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
+		toast.show();
 	}
 
 	private void buildProposal(Sentence sentence) throws MalFormedSentence {
@@ -119,7 +157,7 @@ public class TestActivity extends Activity {
 
 		int i = 0;
 		for (AnswerFragment fragment : arrayList) {
-			if(fragment.getFragmentType() == AnswerFragment.CONSTANT_FRAGMENT) {
+			if (fragment.getFragmentType() == AnswerFragment.CONSTANT_FRAGMENT) {
 				TextView statText = new TextView(this);
 				statText.setText(fragment.getQuestion());
 				statText.setId(100 + i);
@@ -147,26 +185,30 @@ public class TestActivity extends Activity {
 
 	private void buildSolution(Sentence sentence) throws MalFormedSentence {
 		FlowLayout layout = (FlowLayout) findViewById(R.id.answer);
-		ArrayList<AnswerFragment> arrayList = sentence.getAnswerList();
 		layout.removeAllViews();
 
+		if (sentence == null)
+			return;
+
+		ArrayList<AnswerFragment> arrayList = sentence.getAnswerList();
 		int i = 0;
 		for (AnswerFragment fragment : arrayList) {
 			TextView statText = new TextView(this);
 			statText.setText(fragment.getQuestion());
 			statText.setId(2000 + i);
 			statText.setTypeface(Typeface.DEFAULT);
-			//statText.setHeight(70);
+			// statText.setHeight(70);
 			statText.setPadding(1, 1, 1, 1);
-			
-			if(fragment.getFragmentType() == AnswerFragment.EDITABLE_FRAGMENT && fragment.getResult() > 0) {
+
+			if (fragment.getFragmentType() == AnswerFragment.EDITABLE_FRAGMENT
+					&& fragment.getResult() > 0) {
 				statText.setBackgroundColor(this.errorColor);
-			} 
+			}
 			layout.addView(statText);
 			i++;
 		}
 	}
-	
+
 	private FileInputStream loadStats(String filename) throws IOException {
 		File sdCard = Environment.getExternalStorageDirectory();
 		File dir = new File(sdCard.getAbsolutePath() + "/TranslatorGame");
@@ -174,7 +216,8 @@ public class TestActivity extends Activity {
 		Logger.debug("Continue");
 		File file = new File(dir, filename);
 		if (file.exists() && !file.canWrite())
-			throw new IOException("Cannot write to system : "+ file.getAbsolutePath());
+			throw new IOException("Cannot write to system : "
+					+ file.getAbsolutePath());
 
 		if (!file.isFile()) {
 			Logger.debug("Continue 1");
@@ -184,7 +227,7 @@ public class TestActivity extends Activity {
 
 		return new FileInputStream(file);
 	}
-	
+
 	private FileOutputStream writeStats(String filename) throws IOException {
 		File sdCard = Environment.getExternalStorageDirectory();
 		File dir = new File(sdCard.getAbsolutePath() + "/TranslatorGame");
@@ -192,7 +235,8 @@ public class TestActivity extends Activity {
 		Logger.debug("Continue");
 		File file = new File(dir, filename);
 		if (file.exists() && !file.canWrite())
-			throw new IOException("Cannot write to system : "+ file.getAbsolutePath());
+			throw new IOException("Cannot write to system : "
+					+ file.getAbsolutePath());
 
 		if (!file.isFile()) {
 			Logger.debug("Continue 1");

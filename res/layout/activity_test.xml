@@ -50,6 +50,7 @@
         android:layout_below="@id/layout_answer_frame"
         android:padding="10dp"
         android:text="Validate"
+        android:onClick="validateProposal"
         android:width="100dp" />
 
     <Button
@@ -61,6 +62,7 @@
         android:clickable="false"
         android:enabled="false"
         android:padding="10dp"
+
         android:text="Skip" />
 
 </RelativeLayout>
