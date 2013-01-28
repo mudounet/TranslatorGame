@@ -66,7 +66,7 @@ public class TestActivity extends Activity {
 			Logger.error("Current langage : " + curLangage);
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("Don't forget to switch to russion keyboard!")
+			builder.setMessage("Don't forget to switch to russian keyboard!")
 					.create().show();
 		}
 
