@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sectionList>
+	<section title="Lesson 1">
+		<test>
+			<question>Bonjour!</question>
+			<answer>Добрый день!</answer>
+		</test>
+		<test>
+			<question>Comment ça va?</question>
+			<answer>Как дела</answer>
+		</test>
+	</section>
+	<section title="Lesson 2">
+		<test>
+			<question>Bonjour, Boris !</question>
+			<answer>Здравствуй Борис</answer>
+		</test>
+		<test>
+			<question>Bonjour Vadim !</question>
+			<answer>Здравствуй Вадим</answer>
+		</test>
+	</section>
+	<section title="Lesson 3">
+		<test>
+			<question>Dites-moi, s’il vous plaît, où est mon journal ?</question>
+			<answer>#Скажите, пожалуйста, #где моя газета?</answer>
+		</test>
+		<test>
+			<question>Je l’ai vu sur le canapé. Le voilà.</question>
+			<answer>Я видел её на #диване; Вот она</answer>
+		</test>
+		<test>
+			<question>Donnez-moi, s’il vous plaît, la revue La Mode.</question>
+			<answer>Дайте #мне, пожалуйста, журнал #Мода</answer>
+		</test>
+		<test>
+			<question>Cette revue me plaît. Je la lis toujours.</question>
+			<answer>Этот журнал мне нравится. #Я всегда читаю #его</answer>
+		</test>
+	</section>
+</sectionList>

@@ -1,0 +1,48 @@
+<mappedTestList>
+   <testStat key="0.0" failed="0" total="1" lastUpdate="2000-01-01 12:00:00.0 MSK" lastFailed="1970-01-01 03:00:00.0 MSK">
+      <lastResults>
+         <float>100.0</float>
+      </lastResults>
+   </testStat>
+   <testStat key="1.0" failed="0" total="1" lastUpdate="2013-01-01 12:00:00.0 MSK" lastFailed="1970-01-01 03:00:00.0 MSK">
+      <lastResults>
+         <float>70.0</float>
+      </lastResults>
+   </testStat>
+   <testStat key="2.1" failed="0" total="3" lastUpdate="2013-01-01 12:00:00.0 MSK" lastFailed="1970-01-01 03:00:00.0 MSK">
+      <lastResults>
+         <float>70.0</float>
+         <float>70.0</float>
+         <float>70.0</float>
+      </lastResults>
+   </testStat>
+   <testStat key="2.0" failed="0" total="2" lastUpdate="2010-01-01 12:00:00.0 MSK" lastFailed="1970-01-01 03:00:00.0 MSK">
+      <lastResults>
+         <float>70.0</float>
+         <float>70.0</float>
+      </lastResults>
+   </testStat>
+   <testStat key="2.3" failed="0" total="1" lastUpdate="2013-01-01 12:00:00.0 MSK" lastFailed="1970-01-01 03:00:00.0 MSK">
+      <lastResults>
+         <float>60.0</float>
+      </lastResults>
+   </testStat>
+   <testStat key="0.1" failed="0" total="5" lastUpdate="2013-01-01 12:00:00.0 MSK" lastFailed="1970-01-01 03:00:00.0 MSK">
+      <lastResults>
+         <float>0.0</float>
+         <float>0.0</float>
+         <float>0.0</float>
+         <float>0.0</float>
+         <float>0.0</float>
+      </lastResults>
+   </testStat>
+   <testStat key="2.2" failed="0" total="2" lastUpdate="2013-01-01 12:00:00.0 MSK" lastFailed="1970-01-01 03:00:00.0 MSK">
+      <lastResults>
+         <float>60.0</float>
+         <float>60.0</float>
+      </lastResults>
+   </testStat>
+   <testStat key="1.1" failed="0" total="0" lastUpdate="2013-01-01 12:00:00.0 MSK" lastFailed="1970-01-01 03:00:00.0 MSK">
+      <lastResults />
+   </testStat>
+</mappedTestList>

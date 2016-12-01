@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_test"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.mudounet.translatorgame.TestActivity">
+
+    <TextView
+        android:id="@+id/question"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:padding="10dp"
+        android:text="Ceci est le texte de ma question"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <FrameLayout
+        android:id="@+id/layout_proposal_frame"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/question"
+        android:padding="10dp" >
+
+        <com.mudounet.FlowLayout
+            android:id="@+id/layout_proposal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/layout_answer_frame"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/layout_proposal_frame"
+        android:padding="10dp" >
+
+        <com.mudounet.FlowLayout
+            android:id="@+id/answer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
+    <Button
+        android:id="@+id/validate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/layout_answer_frame"
+        android:layout_below="@id/layout_answer_frame"
+        android:onClick="validateProposal"
+        android:padding="10dp"
+        android:text="Validate"
+        android:width="100dp" />
+
+    <Button
+        android:id="@+id/skip"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/validate"
+        android:layout_toLeftOf="@id/validate"
+        android:clickable="false"
+        android:enabled="false"
+        android:padding="10dp"
+        android:text="Skip" />
+
+    <GridLayout
+        android:id="@+id/stats"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@id/validate"
+        android:alignmentMode="alignBounds"
+        android:columnCount="4"
+        android:columnOrderPreserved="false"
+        android:padding="20dp"
+        android:useDefaultMargins="true" >
+
+        <TextView
+            android:layout_columnSpan="4"
+            android:layout_gravity="left"
+            android:text="Stats :"
+            android:textSize="22dip" />
+
+        <TextView
+            android:layout_gravity="right"
+            android:text="Result mean :" />
+        
+        <TextView android:id="@+id/sentence_stats" android:text="100% (100%, 100%, 100%, 100%, 100%)" />
+
+        <TextView
+            android:layout_column="0"
+            android:layout_gravity="right"
+            android:text="Last fail :" />
+        
+        <TextView android:id="@+id/last_fail" android:text="" />
+    </GridLayout>
+
+</RelativeLayout>
