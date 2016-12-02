@@ -294,10 +294,11 @@ public class TestActivity extends Activity {
 
     private FileInputStream loadFile(String filename, boolean createFile)
             throws IOException {
+        Logger.info("Trying to load file :"+filename);
         File sdCard = Environment.getExternalStorageDirectory();
         File dir = new File(sdCard.getAbsolutePath() + "/TranslatorGame");
         dir.mkdirs();
-        Logger.debug("Continue");
+        Logger.info("Loading file at : " + dir.getAbsolutePath());
         File file = new File(dir, filename);
         if (file.exists() && !file.canWrite())
             throw new IOException("Cannot write to system : "

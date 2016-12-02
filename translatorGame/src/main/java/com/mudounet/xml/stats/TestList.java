@@ -34,13 +34,18 @@ public class TestList {
         serializer.write(this, stream);
     }
 
-    public void load(InputStream stream) throws Exception {
+    public void load(InputStream stream) {
         if (stream == null) {
             this.list = new ArrayList<TestStat>();
         } else {
             Serializer serializer = new Persister();
-            TestList t = serializer.read(TestList.class, stream);
-            this.list = t.list;
+            TestList t = null;
+            try {
+                t = serializer.read(TestList.class, stream);
+                this.list = t.list;
+            } catch (Exception e) {
+                this.list = new ArrayList<TestStat>();
+            }
         }
     }
 

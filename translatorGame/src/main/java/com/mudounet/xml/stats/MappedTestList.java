@@ -76,7 +76,7 @@ public class MappedTestList extends TestList {
     }
 
     @Override
-    public void load(InputStream stream) throws Exception {
+    public void load(InputStream stream) {
         super.load(stream);
         this.setList(this.getList());
     }
