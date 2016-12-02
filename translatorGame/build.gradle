@@ -36,3 +36,12 @@ dependencies {
     testCompile 'org.slf4j:slf4j-simple:1.7.21'
     testCompile 'junit:junit:4.12'
 }
+
+task copyResDirectoryToClasses(type: Copy) {
+    from "${projectDir}/src/test/res"
+    into "${buildDir}/intermediates/classes/test/debug/res"
+}
+
+afterEvaluate {
+    assembleDebug.dependsOn copyResDirectoryToClasses
+}
