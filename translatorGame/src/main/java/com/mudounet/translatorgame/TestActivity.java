@@ -113,17 +113,23 @@ public class TestActivity extends Activity {
     private void initializeTestActivity() throws Exception {
         Logger.debug("Trying to retrieve XML file");
         InputStream istr;
-        istr = loadFile("lessons.xml", false);
+        istr = loadFile("lessons.xml");
         if (istr == null) {
             Logger.warn("Loading default file");
             Toast toast = Toast.makeText(this, "Loading default file",
                     Toast.LENGTH_LONG);
             toast.show();
-            istr = getAssets().open("lessons.xml");
+            istr = getApplicationContext().getAssets().open("lessons.xml");
         }
 
         Logger.debug("Loading Lesson on memory");
-        lesson = new Lesson(istr, loadFile("lessons.stats", true));
+        lesson = new Lesson(istr);
+        try {
+            lesson.loadStats(loadFile("lessons.stats"));
+        }
+        catch (Exception e) {
+
+        }
 
         Logger.debug("Initialization finished");
     }
@@ -192,7 +198,7 @@ public class TestActivity extends Activity {
 
         if (!statIsInserted) {
             sentence.addResult(resultAsPerc);
-            lesson.saveStats(writeStats("lessons.stats"));
+            lesson.saveStats(writeFile("lessons.stats"));
             statIsInserted = true;
             displayStats(sentence);
         }
@@ -292,7 +298,7 @@ public class TestActivity extends Activity {
         }
     }
 
-    private FileInputStream loadFile(String filename, boolean createFile)
+    private InputStream loadFile(String filename)
             throws IOException {
         Logger.info("Trying to load file :"+filename);
         File sdCard = Environment.getExternalStorageDirectory();
@@ -300,36 +306,15 @@ public class TestActivity extends Activity {
         dir.mkdirs();
         Logger.info("Loading file at : " + dir.getAbsolutePath());
         File file = new File(dir, filename);
-        if (file.exists() && !file.canWrite())
-            throw new IOException("Cannot write to system : "
-                    + file.getAbsolutePath());
-
-        if (!file.isFile()) {
-            if (createFile) {
-                Logger.debug("Creating File" + filename);
-                file.createNewFile(); // Exception here
-            } else {
-                return null;
-            }
+        if (file.exists()) {
+            return new FileInputStream(file);
         }
-
-        return new FileInputStream(file);
+        return null;
     }
 
-    private FileOutputStream writeStats(String filename) throws IOException {
-        File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File(sdCard.getAbsolutePath() + "/TranslatorGame");
-        dir.mkdirs();
-        File file = new File(dir, filename);
-        if (file.exists() && !file.canWrite())
-            throw new IOException("Cannot write to system : "
-                    + file.getAbsolutePath());
-
-        if (!file.isFile()) {
-            file.createNewFile(); // Exception here
-        }
-
-        return new FileOutputStream(file);
+    private FileOutputStream writeFile(String filename) throws IOException {
+        Logger.debug("Trying to load file :"+filename);
+        return  getBaseContext().openFileOutput(filename, Context.MODE_PRIVATE);
     }
 
     private String generateHint(int maxNumbers) {
