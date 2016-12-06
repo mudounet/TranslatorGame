@@ -3,5 +3,6 @@
     <!-- Disable the given check in this project -->
     <issue id="InvalidPackage">
         <ignore path="*/org.simpleframework/simple-xml/*" />
+        <ignore path="*/com.github.tony19/logback-android-core/*" />
     </issue>
 </lint>
