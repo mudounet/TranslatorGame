@@ -123,7 +123,13 @@ public class TestActivity extends Activity {
         }
 
         Logger.debug("Loading Lesson on memory");
-        lesson = new Lesson(istr, loadFile("lessons.stats", true));
+        lesson = new Lesson(istr);
+        try {
+            lesson.loadStats(loadFile("lessons.stats", true));
+        }
+        catch (Exception e) {
+            Logger.error("Error when loading stats file");
+        }
 
         Logger.debug("Initialization finished");
     }
