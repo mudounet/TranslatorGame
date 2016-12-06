@@ -8,6 +8,19 @@ Currently, installation is not fully automatized. So, it is necessary to copy le
 
 Of course, it doesn't work unless `android.permission.WRITE_EXTERNAL_STORAGE` is given.
 
+## Note for developers
+
+### Signing application
+
+Due to inclusion of #3, it is necessary to add following `gradle.properties` to `~/.gradle` path:
+    RELEASE_STORE_FILE={path to your keystore, relative to gradle.build file calling these variables}
+    RELEASE_STORE_PASSWORD=*****
+    RELEASE_KEY_ALIAS=*****
+    RELEASE_KEY_PASSWORD=*****
+
+
+in order to be able to sign this application.
+
 ## History
 
 ### V_1.0 :
