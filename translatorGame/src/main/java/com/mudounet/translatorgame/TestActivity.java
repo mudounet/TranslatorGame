@@ -41,6 +41,8 @@ public class TestActivity extends Activity {
     Lesson lesson;
     Sentence sentence;
     Button validateButton;
+    TypeActivity typeActivity; // Category of this activity
+    String filename; // Name of file to use for this activity
     EditText proposal;
     int errorColor = Color.argb(50, 255, 0, 0);
     boolean statIsInserted = false;
@@ -57,6 +59,9 @@ public class TestActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // These two data are sent through another activity
+        typeActivity = (TypeActivity)getIntent().getExtras().get("typeActivity");
+        filename = getIntent().getExtras().getString("filename");
 
         Resources res = getResources();
         String curLanguage = res.getConfiguration().locale.getCountry();
@@ -113,13 +118,13 @@ public class TestActivity extends Activity {
     private void initializeTestActivity() throws Exception {
         Logger.debug("Trying to retrieve XML file");
         InputStream istr;
-        istr = loadFile("lessons.xml");
+        istr = loadFile(this.filename);
         if (istr == null) {
             Logger.warn("Loading default file");
             Toast toast = Toast.makeText(this, "Loading default file",
                     Toast.LENGTH_LONG);
             toast.show();
-            istr = getApplicationContext().getAssets().open("lessons.xml");
+            istr = getApplicationContext().getAssets().open(this.filename);
         }
 
         Logger.debug("Loading Lesson on memory");

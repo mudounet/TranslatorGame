@@ -28,6 +28,8 @@ public class SelectActivity extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				Intent intent = new Intent(context, TestActivity.class);
+				intent.putExtra("typeActivity", TypeActivity.TestActivity);
+				intent.putExtra("filename", "lessons.xml");
 				startActivity(intent);
 			}
 		});
