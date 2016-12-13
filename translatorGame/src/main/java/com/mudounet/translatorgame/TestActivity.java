@@ -14,12 +14,17 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
+import android.Manifest;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
@@ -60,8 +65,10 @@ public class TestActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         // These two data are sent through another activity
-        typeActivity = (TypeActivity)getIntent().getExtras().get("typeActivity");
+        typeActivity = (TypeActivity) getIntent().getExtras().get("typeActivity");
         filename = getIntent().getExtras().getString("filename");
+
+        askForPermissionIfRequired(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         Resources res = getResources();
         String curLanguage = res.getConfiguration().locale.getCountry();
@@ -77,13 +84,16 @@ public class TestActivity extends Activity {
         setContentView(R.layout.activity_test);
         try {
             initializeTestActivity();
+            try {
+                setNewTest();
+            } catch (MalFormedSentence e) {
+                e.printStackTrace();
+            }
         } catch (Exception e) {
             Logger.error("Error while loading activity : " + e.toString());
-        }
-        try {
-            setNewTest();
-        } catch (MalFormedSentence e) {
-            e.printStackTrace();
+            Toast toast = Toast.makeText(this, "Error while loading activity : " + e.toString(),
+                    Toast.LENGTH_LONG);
+            toast.show();
         }
 
     }
@@ -116,6 +126,11 @@ public class TestActivity extends Activity {
     }
 
     private void initializeTestActivity() throws Exception {
+
+        if (!checkWriteExternalPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            throw new Exception("Please activate "+ Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
         Logger.debug("Trying to retrieve XML file");
         InputStream istr;
         istr = loadFile(this.filename);
@@ -131,13 +146,29 @@ public class TestActivity extends Activity {
         lesson = new Lesson(istr);
         try {
             lesson.loadStats(loadFile("lessons.stats"));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Logger.error("Error when loading stats file");
 
         }
 
         Logger.debug("Initialization finished");
+    }
+
+    private boolean checkWriteExternalPermission(String permissionToSet) {
+        // Seen at https://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition/en
+        int hasWriteContactsPermission = ContextCompat.checkSelfPermission(TestActivity.this, permissionToSet);
+        return (hasWriteContactsPermission == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private void askForPermissionIfRequired(String permissionToSet) {
+        final int REQUEST_CODE_ASK_PERMISSIONS = 123;
+
+        if (!checkWriteExternalPermission(permissionToSet)) {
+            ActivityCompat.requestPermissions(TestActivity.this,
+                    new String[]{permissionToSet},
+                    REQUEST_CODE_ASK_PERMISSIONS);
+            return;
+        }
     }
 
     private void setNewTest() throws MalFormedSentence {
@@ -173,7 +204,7 @@ public class TestActivity extends Activity {
 
     /**
      * Called when the user touches the button
-     * 
+     *
      * @throws Exception
      * @throws IOException
      */
@@ -252,8 +283,8 @@ public class TestActivity extends Activity {
                 EditText btnTag = new EditText(this);
                 btnTag.setText("");
                 btnTag.setId(100 + i);
-                btnTag.setInputType(android.text.InputType.TYPE_CLASS_TEXT
-                        | android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                btnTag.setInputType(InputType.TYPE_CLASS_TEXT
+                        | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 
                 int maxLength = fragment.getQuestion().length();
                 InputFilter[] FilterArray = new InputFilter[1];
@@ -306,7 +337,7 @@ public class TestActivity extends Activity {
 
     private InputStream loadFile(String filename)
             throws IOException {
-        Logger.info("Trying to load file :"+filename);
+        Logger.info("Trying to load file :" + filename);
         File sdCard = Environment.getExternalStorageDirectory();
         File dir = new File(sdCard.getAbsolutePath() + "/TranslatorGame");
         dir.mkdirs();
@@ -319,8 +350,8 @@ public class TestActivity extends Activity {
     }
 
     private FileOutputStream writeFile(String filename) throws IOException {
-        Logger.debug("Trying to load file :"+filename);
-        return  getBaseContext().openFileOutput(filename, Context.MODE_PRIVATE);
+        Logger.debug("Trying to load file :" + filename);
+        return getBaseContext().openFileOutput(filename, Context.MODE_PRIVATE);
     }
 
     private String generateHint(int maxNumbers) {
@@ -332,17 +363,17 @@ public class TestActivity extends Activity {
     }
 
     private void addListeners(final EditText previousEd,
-            final EditText currentEd, final int previousMaxLength) {
+                              final EditText currentEd, final int previousMaxLength) {
         if (previousEd == null)
             return;
 
         previousEd.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count,
-                    int after) {
+                                          int after) {
             }
 
             public void onTextChanged(CharSequence s, int start, int before,
-                    int count) {
+                                      int count) {
             }
 
             @Override
