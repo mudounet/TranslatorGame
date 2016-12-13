@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.res.Resources;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -29,6 +28,7 @@ import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.view.inputmethod.InputMethodSubtype;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -70,8 +70,9 @@ public class TestActivity extends Activity {
 
         askForPermissionIfRequired(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        Resources res = getResources();
-        String curLanguage = res.getConfiguration().locale.getCountry();
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodSubtype ims = imm.getCurrentInputMethodSubtype();
+        String curLanguage = ims.getLocale();
 
         if (!curLanguage.equalsIgnoreCase("RU")) {
             Logger.error("Current langage : " + curLanguage);
