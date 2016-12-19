@@ -9,7 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class SelectActivity extends ListActivity {
+public class MainActivity extends ListActivity {
 
     Button button;
 
