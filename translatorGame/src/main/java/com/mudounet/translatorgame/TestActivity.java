@@ -143,10 +143,12 @@ public class TestActivity extends Activity {
             istr = getApplicationContext().getAssets().open(this.filename);
         }
 
+        String fileNameWithOutExt = this.filename.replaceFirst("[.][^.]+$", "");
+
         Logger.debug("Loading Lesson on memory");
         lesson = new Lesson(istr);
         try {
-            lesson.loadStats(loadFile("lessons.stats"));
+            lesson.loadStats(loadFile(fileNameWithOutExt + ".stats"));
         } catch (Exception e) {
             Logger.error("Error when loading stats file");
 
