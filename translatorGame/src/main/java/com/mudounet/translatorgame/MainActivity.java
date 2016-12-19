@@ -66,7 +66,9 @@ public class MainActivity extends AppCompatActivity {
                 
                 Intent intent = new Intent(context, TestActivity.class);
                 intent.putExtra("typeActivity", TypeActivity.TestActivity);
-                intent.putExtra("filename", "lessons.xml");
+                intent.putExtra("filename", expandableListDetail.get(
+                        expandableListTitle.get(groupPosition)).get(
+                        childPosition));
                 startActivity(intent);
                 return false;
             }

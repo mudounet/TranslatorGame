@@ -9,29 +9,15 @@ public class MainActivityFiller {
         HashMap<String, List<String>> expandableListDetail = new HashMap<String, List<String>>();
 
         List<String> cricket = new ArrayList<String>();
-        cricket.add("India");
-        cricket.add("Pakistan");
-        cricket.add("Australia");
-        cricket.add("England");
-        cricket.add("South Africa");
+        cricket.add("lessons.xml");
+        cricket.add("Declensions.xml");
 
         List<String> football = new ArrayList<String>();
-        football.add("Brazil");
-        football.add("Spain");
-        football.add("Germany");
-        football.add("Netherlands");
-        football.add("Italy");
+        football.add("lessons.xml");
+        football.add("Declensions.xml");
 
-        List<String> basketball = new ArrayList<String>();
-        basketball.add("United States");
-        basketball.add("Spain");
-        basketball.add("Argentina");
-        basketball.add("France");
-        basketball.add("Russia");
-
-        expandableListDetail.put("CRICKET TEAMS", cricket);
-        expandableListDetail.put("FOOTBALL TEAMS", football);
-        expandableListDetail.put("BASKETBALL TEAMS", basketball);
+        expandableListDetail.put("Group #1", cricket);
+        expandableListDetail.put("Group #2", football);
         return expandableListDetail;
     }
 }
