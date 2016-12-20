@@ -60,7 +60,7 @@
 		</test>
 		<test>
 			<question>Les participants à la conférence ont parlé des problèmes de droits de l’homme.</question>
-			<answer>Уча́стники конфере́нции говори́ли о проблемах защи́ты прав челове́ка. говори́ли о чём? – о #проблемах [предложный, мн. ч.]</answer>
+			<answer>Уча́стники конфере́нции говори́ли о #проблемах защи́ты прав челове́ка. говори́ли о чём? – о #проблемах [предложный, мн. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 	</section>
