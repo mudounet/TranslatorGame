@@ -25,8 +25,8 @@ public class AnswerFragment {
     public AnswerFragment() {
     }
 
-    public AnswerFragment(String text) throws MalFormedSentence {
-        setQuestion(text);
+    public AnswerFragment(String text, boolean reverseLogic) throws MalFormedSentence {
+        setQuestion(text, reverseLogic);
         setAnswer("");
     }
 
@@ -94,7 +94,7 @@ public class AnswerFragment {
      * @param text the text to set
      * @throws Exception
      */
-    public void setQuestion(String text) throws MalFormedSentence {
+    public void setQuestion(String text, boolean reverseLogic) throws MalFormedSentence {
 
         this.fragmentType = 0;
         Pattern patt = Pattern.compile("^#(\\p{L}+)$");

@@ -26,12 +26,14 @@ public class AnswerFragmentTest {
 	 */
 	@Test
 	public void testValidate() throws MalFormedSentence {
-		testFragmentValidation("testElement", new String[] {"TESTElennt", "testemnet", "etlmnet"}, new int[] {2, 4, 6});
-		testFragmentValidation("Познакомьтесь", new String[] {"познrtомьтес", "поerнакьтесь", "поerнакьтеre"}, new int[] {3, 4, 6});
+		testFragmentValidation("testElement", false, new String[] {"TESTElennt", "testemnet", "etlmnet"}, new int[] {2, 4, 6});
+		testFragmentValidation("Познакомьтесь", false, new String[] {"познrtомьтес", "поerнакьтесь", "поerнакьтеre"}, new int[] {3, 4, 6});
+		testFragmentValidation("#testElement", true, new String[] {"TESTElennt", "testemnet", "etlmnet"}, new int[] {2, 4, 6});
+		testFragmentValidation("#Познакомьтесь", true, new String[] {"познrtомьтес", "поerнакьтесь", "поerнакьтеre"}, new int[] {3, 4, 6});
 	}
 	
-	private void testFragmentValidation(String origString, String[] answers, int[] results) throws MalFormedSentence {
-		QFTested = new AnswerFragment(origString);
+	private void testFragmentValidation(String origString, boolean reverseLogic, String[] answers, int[] results) throws MalFormedSentence {
+		QFTested = new AnswerFragment(origString, reverseLogic);
 		assertEquals(origString.length(), QFTested.getResult());
 		
 		for(int idx = 0; idx < answers.length; idx++) {
@@ -49,45 +51,83 @@ public class AnswerFragmentTest {
 	 */
 	@Test
 	public void testGetFragmentType() throws MalFormedSentence {
-		QFTested.setQuestion("Познакомьтесь");
+		QFTested.setQuestion("Познакомьтесь", false);
 		assertEquals(AnswerFragment.EDITABLE_FRAGMENT, QFTested.getFragmentType());
 		assertEquals("Познакомьтесь", QFTested.getQuestion());
 
 		
-		QFTested.setQuestion("#Познакомьтесь");
+		QFTested.setQuestion("#Познакомьтесь", false);
 		assertEquals(AnswerFragment.CONSTANT_FRAGMENT, QFTested.getFragmentType());
 		assertEquals("Познакомьтесь", QFTested.getQuestion());
-		
-		QFTested.setQuestion(" : ");
+
+		QFTested.setQuestion(" : ", false);
 		assertEquals(AnswerFragment.CONSTANT_FRAGMENT, QFTested.getFragmentType());
 		assertEquals(" : ", QFTested.getQuestion());
 		
-		QFTested.setQuestion(", ");
+		QFTested.setQuestion(", ", false);
 		assertEquals(AnswerFragment.CONSTANT_FRAGMENT, QFTested.getFragmentType());
 		assertEquals(", ", QFTested.getQuestion());
 
-		QFTested.setQuestion("! ");
+		QFTested.setQuestion("! ", false);
 		assertEquals(AnswerFragment.CONSTANT_FRAGMENT, QFTested.getFragmentType());
 		assertEquals("! ", QFTested.getQuestion());
 		
-		QFTested.setQuestion("?");
+		QFTested.setQuestion("?", false);
+		assertEquals(AnswerFragment.CONSTANT_FRAGMENT, QFTested.getFragmentType());
+		assertEquals("?", QFTested.getQuestion());
+
+		QFTested.setQuestion("#Познакомьтесь", true);
+		assertEquals(AnswerFragment.EDITABLE_FRAGMENT, QFTested.getFragmentType());
+		assertEquals("Познакомьтесь", QFTested.getQuestion());
+
+		QFTested.setQuestion("Познакомьтесь", true);
+		assertEquals(AnswerFragment.CONSTANT_FRAGMENT, QFTested.getFragmentType());
+		assertEquals("Познакомьтесь", QFTested.getQuestion());
+
+		QFTested.setQuestion(" : ", true);
+		assertEquals(AnswerFragment.CONSTANT_FRAGMENT, QFTested.getFragmentType());
+		assertEquals(" : ", QFTested.getQuestion());
+
+		QFTested.setQuestion(", ", true);
+		assertEquals(AnswerFragment.CONSTANT_FRAGMENT, QFTested.getFragmentType());
+		assertEquals(", ", QFTested.getQuestion());
+
+		QFTested.setQuestion("! ", true);
+		assertEquals(AnswerFragment.CONSTANT_FRAGMENT, QFTested.getFragmentType());
+		assertEquals("! ", QFTested.getQuestion());
+
+		QFTested.setQuestion("?", true);
 		assertEquals(AnswerFragment.CONSTANT_FRAGMENT, QFTested.getFragmentType());
 		assertEquals("?", QFTested.getQuestion());
 	}
 	
 	@Test(expected=MalFormedSentence.class)
-	public void testGetFragmentType1() throws MalFormedSentence {
-		QFTested.setQuestion("");
-	}
-	
-	@Test(expected=MalFormedSentence.class)
-	public void testGetFragmentType2() throws MalFormedSentence {
-		QFTested.setQuestion(" Познакомьтесь  ");
-	}
-	
-	@Test(expected=MalFormedSentence.class)
-	public void testGetFragmentType3() throws MalFormedSentence {
-		QFTested.setQuestion(" #Познакомьтесь  ");
+	public void testGetFragmentType1False() throws MalFormedSentence {
+		QFTested.setQuestion("", false);
 	}
 
+	@Test(expected=MalFormedSentence.class)
+	public void testGetFragmentType1True() throws MalFormedSentence {
+		QFTested.setQuestion("", true);
+	}
+	
+	@Test(expected=MalFormedSentence.class)
+	public void testGetFragmentType2False() throws MalFormedSentence {
+		QFTested.setQuestion(" Познакомьтесь  ", false);
+	}
+
+	@Test(expected=MalFormedSentence.class)
+	public void testGetFragmentType2True() throws MalFormedSentence {
+		QFTested.setQuestion(" Познакомьтесь  ", true);
+	}
+	
+	@Test(expected=MalFormedSentence.class)
+	public void testGetFragmentType3False() throws MalFormedSentence {
+		QFTested.setQuestion(" #Познакомьтесь  ", false);
+	}
+
+	@Test(expected=MalFormedSentence.class)
+	public void testGetFragmentType3True() throws MalFormedSentence {
+		QFTested.setQuestion(" #Познакомьтесь  ", true);
+	}
 }
