@@ -26,23 +26,20 @@ public class AnswerFragmentTest {
 	 */
 	@Test
 	public void testValidate() throws MalFormedSentence {
-		testFragmentValidation("testElement", false, new String[] {"TESTElennt", "testemnet", "etlmnet"}, new int[] {2, 4, 6});
-		testFragmentValidation("Познакомьтесь", false, new String[] {"познrtомьтес", "поerнакьтесь", "поerнакьтеre"}, new int[] {3, 4, 6});
-		testFragmentValidation("#testElement", true, new String[] {"TESTElennt", "testemnet", "etlmnet"}, new int[] {2, 4, 6});
-		testFragmentValidation("#Познакомьтесь", true, new String[] {"познrtомьтес", "поerнакьтесь", "поerнакьтеre"}, new int[] {3, 4, 6});
+		testFragmentValidation("testElement", 11, false, new String[] {"TESTElennt", "testemnet", "etlmnet", "testElement"}, new int[] {2, 4, 6, 0});
+		testFragmentValidation("Познакомьтесь", 13, false, new String[] {"познrtомьтес", "поerнакьтесь", "поerнакьтеre", "Познакомьтесь"}, new int[] {3, 4, 6, 0});
+		testFragmentValidation("#testElement", 11, true, new String[] {"TESTElennt", "testemnet", "etlmnet", "testElement"}, new int[] {2, 4, 6, 0});
+		testFragmentValidation("#Познакомьтесь", 13, true, new String[] {"познrtомьтес", "поerнакьтесь", "поerнакьтеre", "Познакомьтесь"}, new int[] {3, 4, 6, 0});
 	}
 	
-	private void testFragmentValidation(String origString, boolean reverseLogic, String[] answers, int[] results) throws MalFormedSentence {
+	private void testFragmentValidation(String origString, int expStrLength, boolean reverseLogic, String[] answers, int[] results) throws MalFormedSentence {
 		QFTested = new AnswerFragment(origString, reverseLogic);
-		assertEquals(origString.length(), QFTested.getResult());
+		assertEquals(expStrLength, QFTested.getResult());
 		
 		for(int idx = 0; idx < answers.length; idx++) {
 			QFTested.setAnswer(answers[idx]);
 			assertEquals(results[idx], QFTested.getResult());
 		}
-		
-		QFTested.setAnswer(origString);
-		assertEquals(0, QFTested.getResult());
 	}
 
 	/**
