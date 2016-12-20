@@ -25,8 +25,8 @@ public class AnswerFragment {
     public AnswerFragment() {
     }
 
-    public AnswerFragment(String text) throws MalFormedSentence {
-        setQuestion(text);
+    public AnswerFragment(String text, boolean reverseLogic) throws MalFormedSentence {
+        setQuestion(text, reverseLogic);
         setAnswer("");
     }
 
@@ -94,28 +94,31 @@ public class AnswerFragment {
      * @param text the text to set
      * @throws Exception
      */
-    public void setQuestion(String text) throws MalFormedSentence {
+    public void setQuestion(String text, boolean reverseLogic) throws MalFormedSentence {
 
         this.fragmentType = 0;
         Pattern patt = Pattern.compile("^#(\\p{L}+)$");
         Matcher m = patt.matcher(text);
 
         if (text.matches("^\\p{L}+$")) {
-            this.fragmentType = EDITABLE_FRAGMENT;
+            this.fragmentType = (reverseLogic) ? CONSTANT_FRAGMENT : EDITABLE_FRAGMENT;
             this.question = text;
             setAnswer("");
         } else if (m.matches()) {
-            this.fragmentType = CONSTANT_FRAGMENT;
+            this.fragmentType = (reverseLogic) ? EDITABLE_FRAGMENT : CONSTANT_FRAGMENT;
             this.question = m.group(1);
-            setAnswer(this.question);
         } else if (text.matches("^\\P{L}+$")) {
             this.fragmentType = CONSTANT_FRAGMENT;
             this.question = text;
-            setAnswer(this.question);
         } else {
             Logger.error("\"" + text + "\" is not valid!");
             throw new MalFormedSentence("\"" + text + "\" is not valid!");
         }
+
+        if(this.fragmentType == EDITABLE_FRAGMENT)
+            setAnswer("");
+        else
+            setAnswer(this.question);
 
     }
 

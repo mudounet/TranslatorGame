@@ -12,6 +12,9 @@ public class Test {
 	@Element
 	private String answer;
 
+	@Element(required=false)
+	private boolean reverseLogic = false;
+
 	/**
 	 * @return the question
 	 */
@@ -39,4 +42,18 @@ public class Test {
 	public void setAnswer(String answer) {
 		this.answer = answer;
 	}
+
+    /**
+     * @return the answer is in reverse logic
+     */
+    public boolean isReverseLogic() {
+        return reverseLogic;
+    }
+
+    /**
+     * @param reverseLogic Indicate if the answer is in reverse logic
+     */
+    public void setReverseLogic(boolean reverseLogic) {
+        this.reverseLogic = reverseLogic;
+    }
 }
