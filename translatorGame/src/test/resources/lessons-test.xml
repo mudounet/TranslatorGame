@@ -3,7 +3,8 @@
 	<section title="Lesson 1">
 		<test>
 			<question>Bonjour!</question>
-			<answer>Добрый день!</answer>
+			<answer>#Добрый #день!</answer>
+			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
 			<question>Comment ça va?</question>
@@ -13,7 +14,8 @@
 	<section title="Lesson 2">
 		<test>
 			<question>Bonjour, Boris !</question>
-			<answer>Здравствуй Борис</answer>
+			<answer>#Здравствуй #Борис</answer>
+			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
 			<question>Bonjour Vadim !</question>
