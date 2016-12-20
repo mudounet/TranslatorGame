@@ -28,6 +28,7 @@ public class Sentence {
 	public ArrayList<AnswerFragment> getAnswerList() throws MalFormedSentence {
 
 		String answer = test.getAnswer();
+		boolean reverseLogic = test.isReverseLogic();
 		if ( answerList == null || questionRef != answer) {
 
 			answerList = new ArrayList<AnswerFragment>();
@@ -53,7 +54,7 @@ public class Sentence {
 
 				if (charType != lastCharType) {
 					Logger.debug("Found match : \"" + l.toString() + "\"");
-					AnswerFragment fragment = new AnswerFragment(l.toString());
+					AnswerFragment fragment = new AnswerFragment(l.toString(), reverseLogic);
 					answerList.add(fragment);
 
 					l = new StringBuilder();
@@ -64,7 +65,7 @@ public class Sentence {
 			}
 
 			Logger.debug("Found last match : \"" + l.toString() + "\"");
-			AnswerFragment fragment = new AnswerFragment(l.toString());
+			AnswerFragment fragment = new AnswerFragment(l.toString(), reverseLogic);
 			answerList.add(fragment);
 		}
 		return answerList;
