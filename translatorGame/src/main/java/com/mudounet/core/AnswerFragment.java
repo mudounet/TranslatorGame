@@ -101,21 +101,24 @@ public class AnswerFragment {
         Matcher m = patt.matcher(text);
 
         if (text.matches("^\\p{L}+$")) {
-            this.fragmentType = EDITABLE_FRAGMENT;
+            this.fragmentType = (reverseLogic) ? CONSTANT_FRAGMENT : EDITABLE_FRAGMENT;
             this.question = text;
             setAnswer("");
         } else if (m.matches()) {
-            this.fragmentType = CONSTANT_FRAGMENT;
+            this.fragmentType = (reverseLogic) ? EDITABLE_FRAGMENT : CONSTANT_FRAGMENT;
             this.question = m.group(1);
-            setAnswer(this.question);
         } else if (text.matches("^\\P{L}+$")) {
             this.fragmentType = CONSTANT_FRAGMENT;
             this.question = text;
-            setAnswer(this.question);
         } else {
             Logger.error("\"" + text + "\" is not valid!");
             throw new MalFormedSentence("\"" + text + "\" is not valid!");
         }
+
+        if(this.fragmentType == EDITABLE_FRAGMENT)
+            setAnswer("");
+        else
+            setAnswer(this.question);
 
     }
 
