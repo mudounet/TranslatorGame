@@ -11,9 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -29,7 +27,6 @@ import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.view.inputmethod.InputMethodSubtype;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -47,6 +44,7 @@ public class TestActivity extends Activity {
     Lesson lesson;
     Sentence sentence;
     Button validateButton;
+    CustomKeyboard mCustomKeyboard;
     TypeActivity typeActivity; // Category of this activity
     String filename; // Name of file to use for this activity
     EditText proposal;
@@ -71,31 +69,9 @@ public class TestActivity extends Activity {
 
         askForPermissionIfRequired(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-        InputMethodSubtype ims = imm.getCurrentInputMethodSubtype();
-        String curLanguage = ims.getLocale();
-
-        if (!curLanguage.equalsIgnoreCase("RU")) {
-            Logger.error("Current langage : " + curLanguage);
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("You need to switch to a russian keyboard to continue...")
-                    .setCancelable(false)
-                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            ((InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE)).showInputMethodPicker();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    });
-            AlertDialog alert = builder.create();
-            alert.show();
-        }
-
         setContentView(R.layout.activity_test);
+        mCustomKeyboard= new CustomKeyboard(this, R.id.keyboardview, R.xml.hexkbd );
+
         try {
             initializeTestActivity();
             try {
@@ -109,7 +85,13 @@ public class TestActivity extends Activity {
                     Toast.LENGTH_LONG);
             toast.show();
         }
+    }
 
+
+    @Override
+    public void onBackPressed() {
+        // NOTE Trap the back key: when the CustomKeyboard is still visible hide it, only when it is invisible, finish activity
+        if( mCustomKeyboard.isCustomKeyboardVisible() ) mCustomKeyboard.hideCustomKeyboard(); else this.finish();
     }
 
     /*
@@ -315,6 +297,8 @@ public class TestActivity extends Activity {
                 btnTag.setTypeface(Typeface.MONOSPACE);
                 this.listOfView.add(btnTag);
                 layout.addView(btnTag);
+
+                mCustomKeyboard.registerEditText(btnTag);
 
                 addListeners(lastEditText, btnTag, previousMaxLength);
                 lastEditText = btnTag;
