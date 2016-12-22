@@ -134,8 +134,10 @@ public class TestActivity extends Activity {
 
         Logger.debug("Trying to retrieve XML file");
         InputStream istr;
-        istr = loadFile(this.filename);
-        if (istr == null) {
+        try {
+            istr = loadFile(this.filename);
+        }
+        catch (Exception e) {
             Logger.warn("Loading default file");
             Toast toast = Toast.makeText(this, "Loading default file",
                     Toast.LENGTH_LONG);
