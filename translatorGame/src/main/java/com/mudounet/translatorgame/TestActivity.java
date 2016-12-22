@@ -341,19 +341,40 @@ public class TestActivity extends Activity {
     private InputStream loadFile(String filename)
             throws IOException {
         Logger.info("Trying to load file :" + filename);
-        File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File(sdCard.getAbsolutePath() + "/TranslatorGame");
-        dir.mkdirs();
-        Logger.info("Loading file at : " + dir.getAbsolutePath());
-        File file = new File(dir, filename);
-        if (file.exists()) {
-            return new FileInputStream(file);
+        if(checkWriteExternalPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            File sdCard = Environment.getExternalStorageDirectory();
+            File dir = new File(sdCard.getAbsolutePath() + "/TranslatorGame");
+            dir.mkdirs();
+            Logger.info("Loading file at : " + dir.getAbsolutePath());
+            File file = new File(dir, filename);
+            if (file.exists()) {
+                return new FileInputStream(file);
+            }
         }
-        return null;
+
+        // When everything else has failed, we try to open it from application storage...
+        return getBaseContext().openFileInput(filename);
     }
 
     private FileOutputStream writeFile(String filename) throws IOException {
-        Logger.debug("Trying to load file :" + filename);
+        Logger.debug("Trying to save file :" + filename);
+        if(checkWriteExternalPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            File sdCard = Environment.getExternalStorageDirectory();
+            File dir = new File(sdCard.getAbsolutePath() + "/TranslatorGame");
+            dir.mkdirs();
+            File file = new File(dir, filename);
+            if (file.exists() && !file.canWrite())
+                throw new IOException("Cannot write to system : "
+                    + file.getAbsolutePath());
+
+            if (!file.isFile()) {
+                file.createNewFile(); // Exception here
+            }
+
+            return new FileOutputStream(file);
+        }
+
+        // When everything else has failed, we try to write it from application storage...
         return getBaseContext().openFileOutput(filename, Context.MODE_PRIVATE);
     }
 
