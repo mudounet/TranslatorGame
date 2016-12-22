@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -78,8 +79,20 @@ public class TestActivity extends Activity {
             Logger.error("Current langage : " + curLanguage);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Don't forget to switch to russian keyboard!")
-                    .create().show();
+            builder.setMessage("You need to switch to a russian keyboard to continue...")
+                    .setCancelable(false)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            ((InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE)).showInputMethodPicker();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
 
         setContentView(R.layout.activity_test);
