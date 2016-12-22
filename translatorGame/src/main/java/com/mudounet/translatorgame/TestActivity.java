@@ -13,17 +13,23 @@ import org.slf4j.LoggerFactory;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.res.Resources;
+import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Environment;
+import android.Manifest;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.view.inputmethod.InputMethodSubtype;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -41,6 +47,8 @@ public class TestActivity extends Activity {
     Lesson lesson;
     Sentence sentence;
     Button validateButton;
+    TypeActivity typeActivity; // Category of this activity
+    String fileNameWithOutExt; // Name of file to use for this activity (without extension)
     EditText proposal;
     int errorColor = Color.argb(50, 255, 0, 0);
     boolean statIsInserted = false;
@@ -57,28 +65,49 @@ public class TestActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // These two data are sent through another activity
+        typeActivity = (TypeActivity) getIntent().getExtras().get("typeActivity");
+        fileNameWithOutExt = ((String)getIntent().getExtras().getString("filename")).replaceFirst("[.][^.]+$", "");
 
-        Resources res = getResources();
-        String curLanguage = res.getConfiguration().locale.getCountry();
+        askForPermissionIfRequired(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        InputMethodSubtype ims = imm.getCurrentInputMethodSubtype();
+        String curLanguage = ims.getLocale();
 
         if (!curLanguage.equalsIgnoreCase("RU")) {
             Logger.error("Current langage : " + curLanguage);
 
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("Don't forget to switch to russian keyboard!")
-                    .create().show();
+            builder.setMessage("You need to switch to a russian keyboard to continue...")
+                    .setCancelable(false)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            ((InputMethodManager)getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE)).showInputMethodPicker();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.show();
         }
 
         setContentView(R.layout.activity_test);
         try {
             initializeTestActivity();
+            try {
+                setNewTest();
+            } catch (MalFormedSentence e) {
+                e.printStackTrace();
+            }
         } catch (Exception e) {
             Logger.error("Error while loading activity : " + e.toString());
-        }
-        try {
-            setNewTest();
-        } catch (MalFormedSentence e) {
-            e.printStackTrace();
+            Toast toast = Toast.makeText(this, "Error while loading activity : " + e.toString(),
+                    Toast.LENGTH_LONG);
+            toast.show();
         }
 
     }
@@ -111,21 +140,51 @@ public class TestActivity extends Activity {
     }
 
     private void initializeTestActivity() throws Exception {
+
+        if (!checkWriteExternalPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            throw new Exception("Please activate "+ Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
         Logger.debug("Trying to retrieve XML file");
         InputStream istr;
-        istr = loadFile("lessons.xml", false);
-        if (istr == null) {
+        try {
+            istr = loadFile(this.fileNameWithOutExt+".xml");
+        }
+        catch (Exception e) {
             Logger.warn("Loading default file");
             Toast toast = Toast.makeText(this, "Loading default file",
                     Toast.LENGTH_LONG);
             toast.show();
-            istr = getAssets().open("lessons.xml");
+            istr = getApplicationContext().getAssets().open(this.fileNameWithOutExt+".xml");
         }
 
         Logger.debug("Loading Lesson on memory");
-        lesson = new Lesson(istr, loadFile("lessons.stats", true));
+        lesson = new Lesson(istr);
+        try {
+            lesson.loadStats(loadFile(fileNameWithOutExt + ".stats"));
+        } catch (Exception e) {
+            Logger.error("Error when loading stats file");
+
+        }
 
         Logger.debug("Initialization finished");
+    }
+
+    private boolean checkWriteExternalPermission(String permissionToSet) {
+        // Seen at https://inthecheesefactory.com/blog/things-you-need-to-know-about-android-m-permission-developer-edition/en
+        int hasWriteContactsPermission = ContextCompat.checkSelfPermission(TestActivity.this, permissionToSet);
+        return (hasWriteContactsPermission == PackageManager.PERMISSION_GRANTED);
+    }
+
+    private void askForPermissionIfRequired(String permissionToSet) {
+        final int REQUEST_CODE_ASK_PERMISSIONS = 123;
+
+        if (!checkWriteExternalPermission(permissionToSet)) {
+            ActivityCompat.requestPermissions(TestActivity.this,
+                    new String[]{permissionToSet},
+                    REQUEST_CODE_ASK_PERMISSIONS);
+            return;
+        }
     }
 
     private void setNewTest() throws MalFormedSentence {
@@ -161,7 +220,7 @@ public class TestActivity extends Activity {
 
     /**
      * Called when the user touches the button
-     * 
+     *
      * @throws Exception
      * @throws IOException
      */
@@ -192,7 +251,7 @@ public class TestActivity extends Activity {
 
         if (!statIsInserted) {
             sentence.addResult(resultAsPerc);
-            lesson.saveStats(writeStats("lessons.stats"));
+            lesson.saveStats(writeFile(this.fileNameWithOutExt+".stats"));
             statIsInserted = true;
             displayStats(sentence);
         }
@@ -240,8 +299,8 @@ public class TestActivity extends Activity {
                 EditText btnTag = new EditText(this);
                 btnTag.setText("");
                 btnTag.setId(100 + i);
-                btnTag.setInputType(android.text.InputType.TYPE_CLASS_TEXT
-                        | android.text.InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                btnTag.setInputType(InputType.TYPE_CLASS_TEXT
+                        | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
 
                 int maxLength = fragment.getQuestion().length();
                 InputFilter[] FilterArray = new InputFilter[1];
@@ -292,44 +351,44 @@ public class TestActivity extends Activity {
         }
     }
 
-    private FileInputStream loadFile(String filename, boolean createFile)
+    private InputStream loadFile(String filename)
             throws IOException {
-        Logger.info("Trying to load file :"+filename);
-        File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File(sdCard.getAbsolutePath() + "/TranslatorGame");
-        dir.mkdirs();
-        Logger.info("Loading file at : " + dir.getAbsolutePath());
-        File file = new File(dir, filename);
-        if (file.exists() && !file.canWrite())
-            throw new IOException("Cannot write to system : "
-                    + file.getAbsolutePath());
-
-        if (!file.isFile()) {
-            if (createFile) {
-                Logger.debug("Creating File" + filename);
-                file.createNewFile(); // Exception here
-            } else {
-                return null;
+        Logger.info("Trying to load file :" + filename);
+        if(checkWriteExternalPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            File sdCard = Environment.getExternalStorageDirectory();
+            File dir = new File(sdCard.getAbsolutePath() + "/TranslatorGame");
+            dir.mkdirs();
+            Logger.info("Loading file at : " + dir.getAbsolutePath());
+            File file = new File(dir, filename);
+            if (file.exists()) {
+                return new FileInputStream(file);
             }
         }
 
-        return new FileInputStream(file);
+        // When everything else has failed, we try to open it from application storage...
+        return getBaseContext().openFileInput(filename);
     }
 
-    private FileOutputStream writeStats(String filename) throws IOException {
-        File sdCard = Environment.getExternalStorageDirectory();
-        File dir = new File(sdCard.getAbsolutePath() + "/TranslatorGame");
-        dir.mkdirs();
-        File file = new File(dir, filename);
-        if (file.exists() && !file.canWrite())
-            throw new IOException("Cannot write to system : "
+    private FileOutputStream writeFile(String filename) throws IOException {
+        Logger.debug("Trying to save file :" + filename);
+        if(checkWriteExternalPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            File sdCard = Environment.getExternalStorageDirectory();
+            File dir = new File(sdCard.getAbsolutePath() + "/TranslatorGame");
+            dir.mkdirs();
+            File file = new File(dir, filename);
+            if (file.exists() && !file.canWrite())
+                throw new IOException("Cannot write to system : "
                     + file.getAbsolutePath());
 
-        if (!file.isFile()) {
-            file.createNewFile(); // Exception here
+            if (!file.isFile()) {
+                file.createNewFile(); // Exception here
+            }
+
+            return new FileOutputStream(file);
         }
 
-        return new FileOutputStream(file);
+        // When everything else has failed, we try to write it from application storage...
+        return getBaseContext().openFileOutput(filename, Context.MODE_PRIVATE);
     }
 
     private String generateHint(int maxNumbers) {
@@ -341,17 +400,17 @@ public class TestActivity extends Activity {
     }
 
     private void addListeners(final EditText previousEd,
-            final EditText currentEd, final int previousMaxLength) {
+                              final EditText currentEd, final int previousMaxLength) {
         if (previousEd == null)
             return;
 
         previousEd.addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count,
-                    int after) {
+                                          int after) {
             }
 
             public void onTextChanged(CharSequence s, int start, int before,
-                    int count) {
+                                      int count) {
             }
 
             @Override

@@ -49,12 +49,15 @@ public class LessonTest {
         s = instance.getNextSentence();
         s.addResult(100f);
         
+        assertEquals(true, s.getTest().isReverseLogic());
         assertEquals(0, instance.getInitialStat(), 0.001f);
         float lastValue = instance.getStat();
         assertTrue(lastValue > 0.0f);
         
         s = instance.getNextSentence();
         s.addResult(100f);
+        
+        assertEquals(false, s.getTest().isReverseLogic());
         assertTrue(instance.getStat() > lastValue);
         lastValue = instance.getStat();
         
@@ -68,6 +71,7 @@ public class LessonTest {
         s.addResult(100f);
         instance.getStat();
         
+        assertEquals(true, s.getTest().isReverseLogic());
         assertEquals(100f, s.getStat().mean(), 0.0001f);
         
         assertEquals(lastValue, instance.getInitialStat(), 0.001f);

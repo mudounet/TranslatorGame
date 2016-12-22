@@ -3,21 +3,51 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 24
     buildToolsVersion "25.0.1"
-    defaultConfig {
-        applicationId "com.mudounet.translatorgame"
-        minSdkVersion 21
-        targetSdkVersion 24
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    def versionPropsFile = file('version.properties')
+
+    if (versionPropsFile.canRead()) {
+        def Properties versionProps = new Properties()
+
+        versionProps.load(new FileInputStream(versionPropsFile))
+
+        def code = versionProps['VERSION_CODE'].toInteger() + 1
+
+        versionProps['VERSION_CODE']=code.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+
+        defaultConfig {
+            applicationId "com.mudounet.translatorgame"
+            minSdkVersion 23
+            targetSdkVersion 24
+            versionCode code
+            versionName "1.1"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
     }
+    else {
+        throw new GradleException("Could not read version.properties!")
+    }
+    
+    signingConfigs {
+        release {
+            // See README.md#Signing Application for instructions on how to sign your release as below
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -30,8 +60,9 @@ dependencies {
         exclude module: 'xpp3'
     }
     compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.github.tony19:logback-android-core:1.1.1-6'
+    compile 'com.github.tony19:logback-android-classic:1.1.1-6'
     compile 'org.slf4j:slf4j-api:1.7.21'
-    compile 'org.slf4j:slf4j-android:1.7.21'
     compile 'com.android.support:design:24.2.1'
     testCompile 'org.slf4j:slf4j-simple:1.7.21'
     testCompile 'junit:junit:4.12'
