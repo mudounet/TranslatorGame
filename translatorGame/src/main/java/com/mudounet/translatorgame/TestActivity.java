@@ -47,7 +47,7 @@ public class TestActivity extends Activity {
     Sentence sentence;
     Button validateButton;
     TypeActivity typeActivity; // Category of this activity
-    String filename; // Name of file to use for this activity
+    String fileNameWithOutExt; // Name of file to use for this activity (without extension)
     EditText proposal;
     int errorColor = Color.argb(50, 255, 0, 0);
     boolean statIsInserted = false;
@@ -66,7 +66,7 @@ public class TestActivity extends Activity {
 
         // These two data are sent through another activity
         typeActivity = (TypeActivity) getIntent().getExtras().get("typeActivity");
-        filename = getIntent().getExtras().getString("filename");
+        fileNameWithOutExt = ((String)getIntent().getExtras().getString("filename")).replaceFirst("[.][^.]+$", "");
 
         askForPermissionIfRequired(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
@@ -135,17 +135,15 @@ public class TestActivity extends Activity {
         Logger.debug("Trying to retrieve XML file");
         InputStream istr;
         try {
-            istr = loadFile(this.filename);
+            istr = loadFile(this.fileNameWithOutExt+".xml");
         }
         catch (Exception e) {
             Logger.warn("Loading default file");
             Toast toast = Toast.makeText(this, "Loading default file",
                     Toast.LENGTH_LONG);
             toast.show();
-            istr = getApplicationContext().getAssets().open(this.filename);
+            istr = getApplicationContext().getAssets().open(this.fileNameWithOutExt+".xml");
         }
-
-        String fileNameWithOutExt = this.filename.replaceFirst("[.][^.]+$", "");
 
         Logger.debug("Loading Lesson on memory");
         lesson = new Lesson(istr);
@@ -240,7 +238,7 @@ public class TestActivity extends Activity {
 
         if (!statIsInserted) {
             sentence.addResult(resultAsPerc);
-            lesson.saveStats(writeFile("lessons.stats"));
+            lesson.saveStats(writeFile(this.fileNameWithOutExt+".stats"));
             statIsInserted = true;
             displayStats(sentence);
         }
