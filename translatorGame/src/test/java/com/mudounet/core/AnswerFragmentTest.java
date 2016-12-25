@@ -51,7 +51,6 @@ public class AnswerFragmentTest {
 		QFTested.setQuestion("Познакомьтесь", false);
 		assertEquals(AnswerFragment.EDITABLE_FRAGMENT, QFTested.getFragmentType());
 		assertEquals("Познакомьтесь", QFTested.getQuestion());
-
 		
 		QFTested.setQuestion("#Познакомьтесь", false);
 		assertEquals(AnswerFragment.CONSTANT_FRAGMENT, QFTested.getFragmentType());
@@ -96,6 +95,22 @@ public class AnswerFragmentTest {
 		QFTested.setQuestion("?", true);
 		assertEquals(AnswerFragment.CONSTANT_FRAGMENT, QFTested.getFragmentType());
 		assertEquals("?", QFTested.getQuestion());
+
+		QFTested.setQuestion("#пра́здников", false);
+		assertEquals(AnswerFragment.CONSTANT_FRAGMENT, QFTested.getFragmentType());
+		assertEquals("пра́здников", QFTested.getQuestion());
+
+		QFTested.setQuestion("пра́здников", true);
+		assertEquals(AnswerFragment.CONSTANT_FRAGMENT, QFTested.getFragmentType());
+		assertEquals("пра́здников", QFTested.getQuestion());
+
+		QFTested.setQuestion("пра́здников", false);
+		assertEquals(AnswerFragment.EDITABLE_FRAGMENT, QFTested.getFragmentType());
+		assertEquals("праздников", QFTested.getQuestion());
+
+		QFTested.setQuestion("#пра́здников", true);
+		assertEquals(AnswerFragment.EDITABLE_FRAGMENT, QFTested.getFragmentType());
+		assertEquals("праздников", QFTested.getQuestion());
 	}
 	
 	@Test(expected=MalFormedSentence.class)

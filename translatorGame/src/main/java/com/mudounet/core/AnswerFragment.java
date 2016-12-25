@@ -97,10 +97,10 @@ public class AnswerFragment {
     public void setQuestion(String text, boolean reverseLogic) throws MalFormedSentence {
 
         this.fragmentType = 0;
-        Pattern patt = Pattern.compile("^#(\\p{L}+)$");
-        Matcher m = patt.matcher(text);
+        Pattern pattern = Pattern.compile("^#([\\p{L}\\p{M}]+)$"); // Unicode character classes are described here : http://www.regular-expressions.info/unicode.html#prop
+        Matcher m = pattern.matcher(text);
 
-        if (text.matches("^\\p{L}+$")) {
+        if (text.matches("^[\\p{L}\\p{M}]+$")) { // Unicode character classes are described here : http://www.regular-expressions.info/unicode.html#prop
             this.fragmentType = (reverseLogic) ? CONSTANT_FRAGMENT : EDITABLE_FRAGMENT;
             this.question = text;
             setAnswer("");
@@ -115,11 +115,13 @@ public class AnswerFragment {
             throw new MalFormedSentence("\"" + text + "\" is not valid!");
         }
 
-        if(this.fragmentType == EDITABLE_FRAGMENT)
+        if(this.fragmentType == EDITABLE_FRAGMENT) {
+            this.question = this.question.replaceAll("\\p{M}", "");
             setAnswer("");
-        else
+        }
+        else {
             setAnswer(this.question);
-
+        }
     }
 
     public int getResult() {
