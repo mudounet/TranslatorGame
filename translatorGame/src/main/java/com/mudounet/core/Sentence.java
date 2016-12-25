@@ -42,7 +42,7 @@ public class Sentence {
 
 				int charType;
 
-				if (Character.toString(myChar).matches("[\\p{L}#]")) {
+				if (Character.toString(myChar).matches("[\\p{L}\\p{M}#]")) { // Unicode character classes are described here : http://www.regular-expressions.info/unicode.html#prop
 					charType = 1;
 				} else {
 					charType = 2;
