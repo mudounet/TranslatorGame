@@ -2,93 +2,280 @@
 <sectionList><!-- taken from http://everydayrussianlanguage.com/fr/cas/probleme/ -->
 	<section title="Lesson 1">
 		<test>
-			<question>L’entreprise fabrique des fenêtres en métal et plastique. Produit quoi? Des fenêtres.</question>
-			<answer>Э́та компа́ния произво́дит металлопла́стиковые #о́кна. произво́дит #что? - #окна [винит., мн. ч.]</answer>
+			<question>L’entreprise fabrique des fenêtres en métal et plastique. Produit quoi? Des fenêtres. [Accusatif]</question>
+			<answer>Э́та компа́ния произво́дит металлопла́стиковые #о́кна. произво́дит #что? - #окна [#Винительный, мн. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
-			<question>Regarde par la fenêtre, que vois-tu?</question>
-			<answer>Посмотри́ в #окно́, что ты там ви́дишь? посмотри́ во что? куда? - в #окно́ [винит., ед. ч.]</answer>
+			<question>Regarde par la fenêtre, que vois-tu? [Accusatif]</question>
+			<answer>Посмотри́ в #окно́, что ты там ви́дишь? посмотри́ во что? куда? - в #окно́ [#Винительный, ед. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
-			<question>Je veux une chambre avec vue sur la mer.</question>
-			<answer>Я хочу́ но́мер с #окнами на мо́ре. но́мер с чем? – с #окнами [творит., мн. ч.]</answer>
+			<question>Je veux une chambre avec vue sur la mer. [Instrumental]</question>
+			<answer>Я хочу́ но́мер с #окнами на мо́ре. но́мер с чем? – с #окнами [#Творительный, мн. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
-			<question>Penche-toi un instant par la fenêtre.</question>
-			<answer>Вы́гляни из #окна на мину́тку. вы́гляни из чего? откуда? – из #окна [родит., ед.ч.]</answer>
+			<question>Penche-toi un instant par la fenêtre. [Génitif]</question>
+			<answer>Вы́гляни из #окна на мину́тку. вы́гляни из чего? откуда? – из #окна [#Родительный, ед.ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
-			<question>Ferme la fenêtre, s’il te plaît.</question>
-			<answer>Закро́й #окно, пожа́луйста! закро́й что? – #окно [винит., ед. ч.]</answer>
+			<question>Ferme la fenêtre, s’il te plaît. [Accusatif]</question>
+			<answer>Закро́й #окно, пожа́луйста! закро́й что? – #окно [#Винительный, ед. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
-			<question>Il n’y a pas de fenêtre dans cette pièce.</question>
-			<answer>В э́той ко́мнате нет #окон. нет чего? – #окон [родит., мн. ч.]</answer>
+			<question>Il n’y a pas de fenêtre dans cette pièce. [Génitif]</question>
+			<answer>В э́той ко́мнате нет #окон. нет чего? – #окон [#Родительный, мн. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 	</section>
 	<section title="Lesson 2 : Проблема">
 		<test>
-			<question>Il a un tas de problèmes.</question>
-			<answer>У него́ ку́ча #проблем. ку́ча чего? – #проблем [родительный, мн. ч.]</answer>
+			<question>Il a un tas de problèmes. [Génitif]</question>
+			<answer>У него́ ку́ча #проблем. ку́ча чего? – #проблем [#родительный, мн. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
-			<question>Ce n’est pas mon problème.</question>
-			<answer>Э́то не моя́ #проблема. э́то не моя́ что? – #проблема [именительный, ед. ч.]</answer>
+			<question>Ce n’est pas mon problème. [Nominatif]</question>
+			<answer>Э́то не моя́ #проблема. э́то не моя́ что? – #проблема [#именительный, ед. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
-			<question>Nous allons résoudre tous vos problèmes.</question>
-			<answer>Мы реши́м все ва́ши #проблемы. реши́м что? – #проблемы [винительный, мн. ч.]</answer>
+			<question>Nous allons résoudre tous vos problèmes. [Accusatif]</question>
+			<answer>Мы реши́м все ва́ши #проблемы. реши́м что? – #проблемы [#винительный, мн. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
-			<question>Elle est très embarrassée par le problème de choix.</question>
-			<answer>Она́ о́чень озабо́чена #проблемой вы́бора. озабо́чена чем? – #проблемой [творительный, ед.ч.]</answer>
+			<question>Elle est très embarrassée par le problème de choix. [Instrumental]</question>
+			<answer>Она́ о́чень озабо́чена #проблемой вы́бора. озабо́чена чем? – #проблемой [#творительный, ед.ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
-			<question>C’est le site-phare mondial pour les discussions universitaires relatives au changement climatique.</question>
-			<answer>Э́то – веду́щий мирово́й сайт для нау́чных диску́ссий по #проблеме измене́ния кли́мата. для диску́ссий по чему? – по #проблеме [дательный, ед. ч.]</answer>
+			<question>C’est le site-phare mondial pour les discussions universitaires relatives au changement climatique. [Datif]</question>
+			<answer>Э́то – веду́щий мирово́й сайт для нау́чных диску́ссий по #проблеме измене́ния кли́мата. для диску́ссий по чему? – по #проблеме [#дательный, ед. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
-			<question>Les participants à la conférence ont parlé des problèmes de droits de l’homme.</question>
-			<answer>Уча́стники конфере́нции говори́ли о #проблемах защи́ты прав челове́ка. говори́ли о чём? – о #проблемах [предложный, мн. ч.]</answer>
+			<question>Les participants à la conférence ont parlé des problèmes de droits de l’homme. [Prépositionnel]</question>
+			<answer>Уча́стники конфере́нции говори́ли о #проблемах защи́ты прав челове́ка. говори́ли о чём? – о #проблемах [#предложный, мн. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 	</section>
 	<section title="Lesson 3 : Праздник">
 		<test>
-			<question>Tous étaient impatients de la fête.</question>
-			<answer>Все с нетерпе́нием жда́ли #пра́здника. жда́ли чего? – #пра́здника [родительный, ед. ч.]</answer>
+			<question>Tous étaient impatients de la fête. [Génitif]</question>
+			<answer>Все с нетерпе́нием жда́ли #пра́здника. жда́ли чего? – #пра́здника [#родительный, ед. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
-			<question>Les enfants adorent les fêtes.</question>
-			<answer>Дети любят #праздники. лю́бят что? – #праздники [винительный, мн. ч.]</answer>
+			<question>Les enfants adorent les fêtes. [Accusatif]</question>
+			<answer>Дети любят #праздники. лю́бят что? – #праздники [#винительный, мн. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
-			<question>A cause des vacances, tous les services de la ville ne fonctionnent pas.</question>
-			<answer>Из-за #пра́здников все слу́жбы го́рода не рабо́тают. не рабо́тают из-за чего? – из-за #пра́здников [родительный, мн. ч.]</answer>
+			<question>A cause des vacances, tous les services de la ville ne fonctionnent pas. [Génitif]</question>
+			<answer>Из-за #пра́здников все слу́жбы го́рода не рабо́тают. не рабо́тают из-за чего? – из-за #пра́здников [#родительный, мн. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
-			<question>Les gens se réjouissaient des vacances.</question>
-			<answer>Лю́ди ра́довались #пра́зднику. ра́довались чему? – #пра́зднику [дательный, ед. ч.]</answer>
+			<question>Les gens se réjouissaient des vacances. [Datif]</question>
+			<answer>Лю́ди ра́довались #пра́зднику. ра́довались чему? – #пра́зднику [#дательный, ед. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
 		</test>
 		<test>
-			<question>Il est temps de se rappeler des vacances à venir et de réfléchir sur les cadeaux.</question>
-			<answer>Са́мое вре́мя вспо́мнить о предстоя́щих #пра́здниках и поду́мать о пода́рках. вспо́мнить о чём? – о #пра́здниках [предложный, мн. ч.]</answer>
+			<question>Il est temps de se rappeler des vacances à venir et de réfléchir sur les cadeaux. [Prepositionnel/Locatif]</question>
+			<answer>Са́мое вре́мя вспо́мнить о предстоя́щих #пра́здниках и поду́мать о пода́рках. вспо́мнить о чём? – о #пра́здниках [#предложный, мн. ч.]</answer>
 			<reverseLogic>true</reverseLogic>
+		</test>
+	</section>
+	<!-- https://www.italki.com/article/324/Les-D%C3%A9clinaisons-En-Russe -->
+	<section title="Nominatif">
+		<test>
+			<question>Qui? Quoi?</question>
+			<answer>Кто? Что? [именительный].</answer>
+		</test>
+		<test>
+			<question>Qui attend dans le café? Boris va au cinéma.</question>
+			<answer>#Кто идёт в кино? #Борис идёт в кино. [#именительный].</answer>
+			<reverseLogic>true</reverseLogic>
+		</test>
+		<test>
+			<question>Qui? Quoi?</question>
+			<answer>#Что это? Это мой #дом. [#именительный].</answer>
+			<reverseLogic>true</reverseLogic>
+		</test>
+	</section>
+	<section title="Génitif">
+		<test>
+			<question>De qui? De quoi?</question>
+			<answer>Кого? Чего? [Родительный].</answer>
+		</test>
+		<test>
+			<question>C'est l’ami de qui? C'est l’ami dе Boris.</question>
+			<answer>#Это - #друг кого? #Это - #друг Бориса [Родительный].</answer>
+		</test>
+		<test>
+			<question>Je n'ai pas de clé.</question>
+			<answer>У меня нет ключа [Родительный]</answer>
+		</test>
+		<test>
+			<question>Sans</question>
+			<answer>Без + Родительный</answer>
+		</test>
+		<test>
+			<question>Pour</question>
+			<answer>для + Родительный</answer>
+		</test>
+		<test>
+			<question>Près de</question>
+			<answer>Около + Родительный</answer>
+		</test>
+		<test>
+			<question>de</question>
+			<answer>Из + Родительный</answer>
+		</test>
+		<test>
+			<question>à</question>
+			<answer>у + Родительный</answer>
+		</test>
+		<test>
+			<question>Au contraire</question>
+			<answer>Напротив + Родительный</answer>
+		</test>
+		<test>
+			<question>de ... à ... (distance)</question>
+			<answer>от....до + Родительный</answer>
+		</test>
+		<test>
+			<question>de ... à ... (temps)</question>
+			<answer>с....до + Родительный</answer>
+		</test>
+		<test>
+			<question>après</question>
+			<answer>после + Родительный</answer>
+		</test>
+		<test>
+			<question>autour de</question>
+			<answer>вокруг + Родительный</answer>
+		</test>
+		<test>
+			<question>devant</question>
+			<answer>мимо + Родительный</answer>
+		</test>
+	</section>
+	<section title="Datif">
+		<test>
+			<question>Pour qui? Pour quoi?</question>
+			<answer>Кому? Чему? [дательный].</answer>
+		</test>
+		<test>
+			<question>Qui appelles-tu? J'appelle mon mari.</question>
+			<answer>#Кому ты звонишь? Я звоню #мужу. [#дательный].</answer>
+			<reverseLogic>true</reverseLogic>
+		</test>
+		<test>
+			<question>Par</question>
+			<answer>По + дательный</answer>
+		</test>
+		<test>
+			<question>Vers/chez</question>
+			<answer>К + дательный</answer>
+		</test>
+		<test>
+			<question>Aller chez le médecin [Datif]</question>
+			<answer>Идти к врачу [дательный]</answer>
+		</test>	
+	</section>
+	<section title="Accusatif">
+		<test>
+			<question>Qui? Quoi?</question>
+			<answer>Кого? Что? [Винительный].</answer>
+		</test>
+		<test>
+			<question>Je rencontre mon ami le soir.</question>
+			<answer>Я встречаю #друга вечером. [#Винительный]</answer>
+			<reverseLogic>true</reverseLogic>
+		</test>
+		<test>
+			<question>Vers</question>
+			<answer>в + Винительный</answer>
+		</test>
+		<test>
+			<question>Vers</question>
+			<answer>на + Винительный</answer>
+		</test>
+		<test>
+			<question>Qui? Quoi?</question>
+			<answer>через + Винительный</answer>
+		</test>
+		<test>
+			<question>Passer par le parc.</question>
+			<answer>Идти через #парк. [Винительный]</answer>
+		</test>
+	</section>
+	<section title="Instrumental">
+		<test>
+			<question>Qui? Quoi? (Instrumental)</question>
+			<answer>Кем? Чем? [Творительный].</answer>
+		</test>
+		<test>
+			<question>Tu travailles comme quoi? Je travaille comme professeur.</question>
+			<answer>#Кем ты работаешь? Я работаю #учителем. [#Творительный]</answer>
+			<reverseLogic>true</reverseLogic>
+		</test>
+		<test>
+			<question>avec</question>
+			<answer>c + Творительный</answer>
+		</test>
+		<test>
+			<question>sous</question>
+			<answer>под + Творительный</answer>
+		</test>
+		<test>
+			<question>sur</question>
+			<answer>над + Творительный</answer>
+		</test>
+		<test>
+			<question>Devant</question>
+			<answer>перед + Творительный</answer>
+		</test>
+		<test>
+			<question>Derrière</question>
+			<answer>за + Творительный</answer>
+		</test>
+		<test>
+			<question>entre</question>
+			<answer>между + Творительный</answer>
+		</test>
+		<test>
+			<question>Passer devant le magasin.</question>
+			<answer>проходить перед магазином. [Творительный]</answer>
+		</test>
+	</section>
+	<section title="Prépositionnel/Locatif">
+		<test>
+			<question>à qui? à quoi? (Instrumental)</question>
+			<answer>О ком? О чём? [предложный].</answer>
+		</test>
+		<test>
+			<question>Я думаю о маме.</question>
+			<answer>Я думаю #о #маме. [#предложный]</answer>
+			<reverseLogic>true</reverseLogic>
+		</test>
+		<test>
+			<question>à - dans</question>
+			<answer>в + предложный</answer>
+		</test>
+		<test>
+			<question>à - sur</question>
+			<answer>на + предложный</answer>
+		</test>
+		<test>
+			<question>à propos de</question>
+			<answer>о + предложный</answer>
 		</test>
 	</section>
 </sectionList>
