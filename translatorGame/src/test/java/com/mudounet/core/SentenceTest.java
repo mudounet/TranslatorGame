@@ -21,6 +21,9 @@ public class SentenceTest {
     public void testGetAnswerList() throws Exception {
         testGetAnswerListValidation("Как по-французски \"конечно\"?", new String[]{"Как", " ", "по", "-", "французски", " \"", "конечно", "\"?"});
         testGetAnswerListValidation("#Вы замужем? - #Да, замужем.", new String[]{"Вы", " ", "замужем", "? - ", "Да", ", ", "замужем", "."});
+        testGetAnswerListValidation("Из-за #праздников все", new String[]{"Из", "-", "за", " ", "праздников", " ", "все"});
+        testGetAnswerListValidation("Из-за #пра́здников все", new String[]{"Из", "-", "за", " ", "пра́здников", " ", "все"}); // This sentence include some pronunciation marks.
+        testGetAnswerListValidation("Из-за пра́здников все", new String[]{"Из", "-", "за", " ", "праздников", " ", "все"}); // This sentence include some pronunciation marks.
     }
 
     @Test
