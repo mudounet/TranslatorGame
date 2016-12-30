@@ -24,10 +24,15 @@
         android:layout_below="@id/question"
         android:padding="10dp" >
 
-        <com.mudounet.FlowLayout
+        <com.google.android.flexbox.FlexboxLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/layout_proposal"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:flexWrap="wrap"
+            app:alignItems="stretch"
+            app:alignContent="stretch" />
     </FrameLayout>
 
     <FrameLayout
@@ -37,10 +42,15 @@
         android:layout_below="@id/layout_proposal_frame"
         android:padding="10dp" >
 
-        <com.mudounet.FlowLayout
+        <com.google.android.flexbox.FlexboxLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/answer"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            app:flexWrap="wrap"
+            app:alignItems="stretch"
+            app:alignContent="stretch" />
     </FrameLayout>
 
     <Button

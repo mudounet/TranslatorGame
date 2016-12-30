@@ -35,7 +35,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mudounet.FlowLayout;
+import com.google.android.flexbox.FlexboxLayout;
 import com.mudounet.core.AnswerFragment;
 import com.mudounet.core.Lesson;
 import com.mudounet.core.MalFormedSentence;
@@ -232,7 +232,7 @@ public class TestActivity extends Activity {
                 .getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
         ArrayList<AnswerFragment> arrayList = sentence.getAnswerList();
-        FlowLayout layout = (FlowLayout) findViewById(R.id.layout_proposal);
+        FlexboxLayout layout = (FlexboxLayout) findViewById(R.id.layout_proposal);
 
         int fragIdx = 0;
         for (AnswerFragment fragment : arrayList) {
@@ -272,7 +272,7 @@ public class TestActivity extends Activity {
     private void buildProposal(Sentence sentence) throws MalFormedSentence {
         ArrayList<AnswerFragment> arrayList = sentence.getAnswerList();
         listOfView = new ArrayList<EditText>();
-        FlowLayout layout = (FlowLayout) findViewById(R.id.layout_proposal);
+        FlexboxLayout layout = (FlexboxLayout) findViewById(R.id.layout_proposal);
         layout.removeAllViews();
 
         // Get the screen's density scale
@@ -326,7 +326,7 @@ public class TestActivity extends Activity {
     }
 
     private void buildSolution(Sentence sentence) throws MalFormedSentence {
-        FlowLayout layout = (FlowLayout) findViewById(R.id.answer);
+        FlexboxLayout layout = (FlexboxLayout) findViewById(R.id.answer);
         layout.removeAllViews();
 
         if (sentence == null)
