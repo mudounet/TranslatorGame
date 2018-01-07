@@ -75,9 +75,15 @@ public class Manager {
         throw new UnsupportedOperationException();
     }
 
-    public boolean commit() {
+    public ObjectId commit(String message) throws IOException, GitAPIException {
         Logger.debug("Storing data into repository");
-        throw new UnsupportedOperationException();
+
+        git.add().addFilepattern(".").call();
+        git.commit().setAuthor(ident).setMessage(message).call();
+
+        ObjectId objectId = git.getRepository().resolve(Constants.HEAD);
+        Logger.debug("HEAD is now at " + objectId.getName());
+        return objectId;
     }
 
     public boolean isDirty() throws GitAPIException, IOException {
