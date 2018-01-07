@@ -30,7 +30,7 @@ public class Manager {
     private String currentBranch;
 
     public Manager(File directory, PersonIdent ident) throws IOException, GitAPIException {
-        new Manager(directory, ident, null, null);
+       this(directory, ident, null, null);
     }
 
     public Manager(File directory, PersonIdent ident, String remoteURL, CredentialsProvider credentials ) throws IOException, GitAPIException {
