@@ -5,6 +5,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.RepositoryCache;
@@ -81,11 +82,10 @@ public class Manager {
 
     public boolean isDirty() throws GitAPIException, IOException {
         Logger.debug("Checking is repository is dirty");
-        Logger.debug(git.toString());
-        Logger.debug(this.git.getRepository().resolve(Constants.HEAD).getName());
         Status status = git.status().call();
-        Logger.debug(status.toString());
-        return status.hasUncommittedChanges();
+        Logger.debug("Clean ? " + status.isClean());
+        Logger.debug("Uncommitted Changes ? " + status.hasUncommittedChanges());
+        return  status.hasUncommittedChanges() || !status.isClean();
     }
 
     public File getFiles() {
