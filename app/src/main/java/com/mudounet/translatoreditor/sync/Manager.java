@@ -9,6 +9,7 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.RepositoryCache;
+import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.util.FS;
 import org.slf4j.LoggerFactory;
@@ -104,10 +105,10 @@ public class Manager {
         return this.git.getRepository().getWorkTree().listFiles(new GitFileFilter());
     }
 
-    public boolean pull() throws SyncException {
+    public boolean pull() throws SyncException, GitAPIException {
         Logger.debug("Retrieving data to remote");
         if(!_isRemoteAvailable()) throw new SyncException("Remote is not configured");
-        throw new UnsupportedOperationException();
+        return this.git.pull().setStrategy(MergeStrategy.THEIRS).call().isSuccessful();
     }
 
     public boolean push() throws SyncException {
