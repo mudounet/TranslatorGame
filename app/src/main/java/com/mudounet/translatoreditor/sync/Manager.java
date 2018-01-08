@@ -14,6 +14,7 @@ import org.eclipse.jgit.util.FS;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 
 /**
@@ -94,9 +95,9 @@ public class Manager {
         return  status.hasUncommittedChanges() || !status.isClean();
     }
 
-    public File getFiles() {
+    public File[] getFiles() {
         Logger.debug("Returning all files");
-        throw new UnsupportedOperationException();
+        return this.git.getRepository().getWorkTree().listFiles(new GitFileFilter());
     }
 
     public boolean pull() throws SyncException {
@@ -114,5 +115,17 @@ public class Manager {
     public boolean syncNeeded() throws SyncException {
         _isRemoteAvailable();
         throw new UnsupportedOperationException();
+    }
+
+    private class GitFileFilter implements FileFilter {
+        private final String[] nokFilenames = new String[] {".git", ".gitignore"};
+
+        public boolean accept(File file) {
+            for (String filename : nokFilenames) {
+                if (file.getName().equals(filename))
+                    return false;
+            }
+            return true;
+        }
     }
 }
