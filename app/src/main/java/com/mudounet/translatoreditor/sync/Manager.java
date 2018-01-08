@@ -8,15 +8,20 @@ import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryCache;
+import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.merge.MergeStrategy;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.transport.URIish;
 import org.eclipse.jgit.util.FS;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 /**
  * Created by guillaume on 04/01/2018.
@@ -30,46 +35,49 @@ public class Manager {
     private Git git;
     private boolean remoteConfigured;
     private PersonIdent ident;
+    private CredentialsProvider credentials;
     private String currentBranch;
 
-    public Manager(File directory, PersonIdent ident) throws IOException, GitAPIException {
+    public Manager(File directory, PersonIdent ident) throws IOException, GitAPIException, URISyntaxException {
        this(directory, ident, null, null);
     }
 
-    public Manager(File directory, PersonIdent ident, String remoteURL, CredentialsProvider credentials ) throws IOException, GitAPIException {
+    public Manager(File directory, PersonIdent ident, String remoteURL, CredentialsProvider credentials ) throws IOException, GitAPIException, URISyntaxException {
 
         this.ident = ident;
-        if (RepositoryCache.FileKey.isGitRepository(directory, FS.DETECTED)) {
+        Logger.debug("Current directory is "+ directory);
 
+        FileRepositoryBuilder repositoryBuilder = new FileRepositoryBuilder();
+        repositoryBuilder.addCeilingDirectory( directory );
+        repositoryBuilder.findGitDir( directory );
+        if( repositoryBuilder.getGitDir() != null ) {
             Logger.debug("GIT filesystem detected");
-
-            Git git = Git.open(directory);
-
-            for (Ref ref : git.getRepository().getAllRefs().values()) {
-                if (ref.getObjectId() == null)
-                    continue;
-                Logger.debug("One GIT reference found");
-                this.git = git;
-                return;
-            }
-        }
-
-        Logger.debug("Repository is not defined yet");
-        if(remoteURL != null) {
-            CloneCommand command = Git.cloneRepository().setDirectory(directory).setURI(remoteURL);
-            if (credentials != null) command.setCredentialsProvider(credentials);
-            this.git = command.call();
-            this.remoteConfigured = true;
-            Logger.debug("Initializing local repository from clone");
+            this.git = new Git( repositoryBuilder.build() );
         }
         else {
+            Logger.debug("Repository is not defined yet");
             Logger.debug("Initializing local repository");
             this.git = Git.init().setDirectory(directory).call();
+        }
+
+        if(remoteURL != null) {
+            _setRemote(remoteURL, credentials);
+            this.git.pull();
+            Logger.debug("Initializing local repository from remote+pull");
         }
     }
 
     private boolean _isRemoteAvailable() {
         return !this.git.getRepository().getRemoteNames().isEmpty();
+    }
+
+    private void _setRemote(String remoteURL, CredentialsProvider credentials) throws IOException, URISyntaxException {
+        if(credentials != null) this.credentials = credentials;
+
+
+        StoredConfig config = git.getRepository().getConfig();
+        config.setString("remote", "origin", "url", new URIish(remoteURL).toString());
+        config.save();
     }
 
     public boolean cancel() {
