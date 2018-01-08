@@ -1,6 +1,8 @@
 package com.mudounet.translatoreditor.sync;
 
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
@@ -36,6 +38,9 @@ public class ManagerTest {
 
     @Rule
     public TemporaryFolder repositoryFolder= new TemporaryFolder();
+
+    @Rule
+    public ExpectedException expectedEx = ExpectedException.none();
 
     @Before
     public void setUp() throws Exception {
@@ -80,15 +85,39 @@ public class ManagerTest {
     }
 
     @Test
+    public void initAlreadySetRepositoryWithoutRemote() throws Exception {
+        Logger.debug("");
+
+        Git git = Git.init().setDirectory(repositoryFolder.getRoot()).call();
+
+        File file = _setTextInFile("testfile", "test");
+        git.add().addFilepattern(file.getPath()).call();
+        git.commit().setAuthor(ident).setMessage("Test commit").call();
+
+        ObjectId sha1 = git.getRepository().resolve(Constants.HEAD);
+
+        git.close();
+
+        Manager manager = new Manager(repositoryFolder.getRoot(), ident);
+
+        assertEquals(sha1, manager.getSha1());
+    }
+
+    @Test
     public void initAlreadySetRepository() throws Exception {
         Git git = Git.init().setDirectory(repositoryFolder.getRoot()).call();
 
         File file = _setTextInFile("testfile", "test");
         git.add().addFilepattern(file.getPath()).call();
         git.commit().setAuthor(ident).setMessage("Test commit").call();
+
+        ObjectId sha1 = git.getRepository().resolve(Constants.HEAD);
+
         git.close();
 
         Manager manager = new Manager(repositoryFolder.getRoot(), ident, remoteURI, credentials);
+
+        assertEquals(sha1, manager.getSha1());
 
         manager.pull();
     }
@@ -104,7 +133,6 @@ public class ManagerTest {
     public void pullWithoutRemote() throws Exception {
         Manager manager = new Manager(repositoryFolder.getRoot(), ident);
 
-       ExpectedException expectedEx = ExpectedException.none();
         expectedEx.expect(SyncException.class);
         expectedEx.expectMessage("Remote is not configured");
 
@@ -122,7 +150,6 @@ public class ManagerTest {
     public void pushWithoutRemote() throws Exception {
         Manager manager = new Manager(repositoryFolder.getRoot(), ident);
 
-        ExpectedException expectedEx = ExpectedException.none();
         expectedEx.expect(SyncException.class);
         expectedEx.expectMessage("Remote is not configured");
 
@@ -141,20 +168,36 @@ public class ManagerTest {
         Logger.debug("Test");
         Manager manager = new Manager(repositoryFolder.getRoot(), ident);
 
+        Assert.assertFalse(manager.isDirty());
+        Assert.assertFalse(_isFileExists("testfile1.txt"));
 
+        File file1 = _setTextInFile("testfile1.txt", "");
+
+        Assert.assertTrue(_isFileExists("testfile1.txt"));
+        Assert.assertTrue(manager.isDirty());
+
+        manager.commit("test commit");
 
         Assert.assertFalse(manager.isDirty());
 
-        Assert.assertFalse(manager.isDirty());
+        _setTextInFile("testfile1.txt", "new text");
 
-        manager.commit();
+        Assert.assertTrue(manager.isDirty());
+
+        manager.commit("test commit");
+
+        Assert.assertFalse(manager.isDirty());
     }
 
     @Test
     public void getFiles() throws Exception {
         Manager manager = new Manager(repositoryFolder.getRoot(), ident);
 
-        manager.getFiles();
+        assertEquals(0, manager.getFiles().length);
+
+        _setTextInFile("testfile1.txt", "new text");
+
+        assertEquals(1, manager.getFiles().length);
     }
 
     private boolean _isFileExists(String filename) {
