@@ -135,7 +135,7 @@ public class Manager {
     public boolean pull() throws SyncException, GitAPIException {
         Logger.debug("Retrieving data to remote");
         if(!_isRemoteAvailable()) throw new SyncException("Remote is not configured");
-        return this.git.pull().setStrategy(MergeStrategy.THEIRS).call().isSuccessful();
+        return this.git.pull().setRebase(true).call().isSuccessful();
     }
 
     public boolean push() throws SyncException, GitAPIException, IOException {
