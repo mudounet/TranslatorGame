@@ -5,6 +5,7 @@ import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.BranchTrackingStatus;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
@@ -143,9 +144,28 @@ public class Manager {
         throw new UnsupportedOperationException();
     }
 
-    public boolean syncNeeded() throws SyncException {
+    public boolean syncNeeded() throws SyncException, IOException {
         if(!_isRemoteAvailable()) throw new SyncException("Remote is not configured");
-        throw new UnsupportedOperationException();
+        List<Integer> count = getCounts();
+        return !(count.get(0) == 0 && count.get(1) == 0);
+    }
+
+    private List<Integer> getCounts() throws IOException {
+        Logger.debug("Getting status of "+ this.currentBranch);
+        BranchTrackingStatus trackingStatus = BranchTrackingStatus.of(this.git.getRepository(), this.currentBranch);
+        List<Integer> counts = new ArrayList<>();
+        if (trackingStatus != null) {
+            counts.add(trackingStatus.getAheadCount());
+            counts.add(trackingStatus.getBehindCount());
+            if (counts.get(0) != 0) Logger.debug(this.currentBranch+" is ahead by "+counts.get(0)+" commits") ;
+            if (counts.get(1) != 0) Logger.debug(this.currentBranch+" is behind by "+counts.get(1)+" commits");
+            if (counts.get(0) == 0 && counts.get(1) == 0) Logger.debug(this.currentBranch+" is in sync") ;
+        } else {
+            Logger.error("Returned null, likely no remote tracking of branch " + this.currentBranch);
+            counts.add(0);
+            counts.add(0);
+        }
+        return counts;
     }
 
     private class GitFileFilter implements FileFilter {
