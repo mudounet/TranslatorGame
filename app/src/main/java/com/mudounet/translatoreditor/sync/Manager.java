@@ -76,13 +76,17 @@ public class Manager {
         throw new UnsupportedOperationException();
     }
 
+    public ObjectId getSha1() throws IOException {
+        return git.getRepository().resolve(Constants.HEAD);
+    }
+
     public ObjectId commit(String message) throws IOException, GitAPIException {
         Logger.debug("Storing data into repository");
 
         git.add().addFilepattern(".").call();
         git.commit().setAuthor(ident).setMessage(message).call();
 
-        ObjectId objectId = git.getRepository().resolve(Constants.HEAD);
+        ObjectId objectId = getSha1();
         Logger.debug("HEAD is now at " + objectId.getName());
         return objectId;
     }
