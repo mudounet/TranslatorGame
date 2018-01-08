@@ -67,8 +67,8 @@ public class Manager {
         }
     }
 
-    private void _isRemoteAvailable() throws SyncException {
-        if (!this.remoteConfigured) throw new SyncException("Remote is not configured");
+    private boolean _isRemoteAvailable() {
+        return !this.git.getRepository().getRemoteNames().isEmpty();
     }
 
     public boolean cancel() {
@@ -102,18 +102,18 @@ public class Manager {
 
     public boolean pull() throws SyncException {
         Logger.debug("Retrieving data to remote");
-        _isRemoteAvailable();
+        if(!_isRemoteAvailable()) throw new SyncException("Remote is not configured");
         throw new UnsupportedOperationException();
     }
 
     public boolean push() throws SyncException {
         Logger.debug("Sending data to remote");
-        _isRemoteAvailable();
+        if (!_isRemoteAvailable()) throw new SyncException("Remote is not configured");
         throw new UnsupportedOperationException();
     }
 
     public boolean syncNeeded() throws SyncException {
-        _isRemoteAvailable();
+        if(!_isRemoteAvailable()) throw new SyncException("Remote is not configured");
         throw new UnsupportedOperationException();
     }
 
