@@ -138,10 +138,11 @@ public class Manager {
         return this.git.pull().setStrategy(MergeStrategy.THEIRS).call().isSuccessful();
     }
 
-    public boolean push() throws SyncException {
+    public boolean push() throws SyncException, GitAPIException, IOException {
         Logger.debug("Sending data to remote");
         if (!_isRemoteAvailable()) throw new SyncException("Remote is not configured");
-        throw new UnsupportedOperationException();
+        this.git.push().setCredentialsProvider(this.credentials).call();
+        return !syncNeeded();
     }
 
     public boolean syncNeeded() throws SyncException, IOException {
