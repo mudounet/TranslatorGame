@@ -1,6 +1,5 @@
-package com.mudounet.translatoreditor.sync;
+package com.mudounet.translatorgame.sync;
 
-import org.eclipse.jgit.api.CloneCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.Status;
@@ -9,17 +8,12 @@ import org.eclipse.jgit.lib.BranchTrackingStatus;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
-import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.RepositoryCache;
 import org.eclipse.jgit.lib.StoredConfig;
-import org.eclipse.jgit.merge.MergeStrategy;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.RemoteConfig;
 import org.eclipse.jgit.transport.URIish;
-import org.eclipse.jgit.util.FS;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;

@@ -1,4 +1,4 @@
-package com.mudounet.translatoreditor.sync;
+package com.mudounet.translatorgame.sync;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Constants;
