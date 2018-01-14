@@ -1,9 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "25.0.1"
-
+    compileSdkVersion 26
     def versionPropsFile = file('version.properties')
 
     if (versionPropsFile.canRead()) {
@@ -16,17 +14,17 @@ android {
         versionProps['VERSION_CODE']=code.toString()
         versionProps.store(versionPropsFile.newWriter(), null)
 
-        defaultConfig {
-            applicationId "com.mudounet.translatorgame"
-            minSdkVersion 23
-            targetSdkVersion 24
-            versionCode code
-            versionName "1.1.2"
-            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        }
+	    defaultConfig {
+    	    applicationId "com.mudounet.translatorgame"
+       		minSdkVersion 24
+        	targetSdkVersion 26
+        	versionCode code
+        	versionName "1.1.2"
+        	testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    	}
     }
     else {
-        throw new GradleException("Could not read version.properties!")
+        throw new FileNotFoundException("Could not read version.properties!")
     }
     
     signingConfigs {
@@ -48,23 +46,24 @@ android {
     }
 }
 
-
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile('org.simpleframework:simple-xml:2.7') {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation('org.simpleframework:simple-xml:2.7') {
         exclude module: 'stax'
         exclude module: 'stax-api'
         exclude module: 'xpp3'
     }
-    compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.github.tony19:logback-android-core:1.1.1-6'
-    compile 'com.github.tony19:logback-android-classic:1.1.1-6'
-    compile 'org.slf4j:slf4j-api:1.7.21'
-    compile 'com.android.support:design:24.2.1'
-    compile 'com.google.android:flexbox:0.2.5'
-    testCompile 'org.slf4j:slf4j-simple:1.7.21'
-    testCompile 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+
+    implementation 'com.github.tony19:logback-android-core:1.1.1-6'
+    implementation 'com.github.tony19:logback-android-classic:1.1.1-6'
+    implementation 'org.slf4j:slf4j-api:1.7.21'
+    implementation 'com.google.android:flexbox:0.3.2'
+
+    testImplementation 'org.slf4j:slf4j-simple:1.7.21'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+
+
 }
