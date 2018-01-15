@@ -61,8 +61,10 @@ dependencies {
         // workaround issue #73
         exclude group: 'com.google.android', module: 'android'
     }
-    implementation 'org.slf4j:slf4j-api:1.7.21'
+    implementation 'org.slf4j:slf4j-api:1.7.25'
     implementation 'com.google.android:flexbox:0.3.2'
+
+    implementation 'org.eclipse.jgit:org.eclipse.jgit:3.7.1.201504261725-r
 
     testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
     testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
