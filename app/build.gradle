@@ -56,12 +56,16 @@ dependencies {
     }
     implementation 'com.android.support:appcompat-v7:26.1.0'
 
-    implementation 'com.github.tony19:logback-android-core:1.1.1-6'
-    implementation 'com.github.tony19:logback-android-classic:1.1.1-6'
+    runtimeOnly 'com.github.tony19:logback-android-core:1.1.1-6'
+    runtimeOnly ('com.github.tony19:logback-android-classic:1.1.1-6') {
+        // workaround issue #73
+        exclude group: 'com.google.android', module: 'android'
+    }
     implementation 'org.slf4j:slf4j-api:1.7.21'
     implementation 'com.google.android:flexbox:0.3.2'
 
-    testImplementation 'org.slf4j:slf4j-simple:1.7.21'
+    testImplementation group: 'ch.qos.logback', name: 'logback-core', version: '1.2.3'
+    testImplementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
 

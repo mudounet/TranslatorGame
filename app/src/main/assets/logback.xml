@@ -1,4 +1,12 @@
 <configuration>
+    <appender name="logcat" class="ch.qos.logback.classic.android.LogcatAppender">
+        <tagEncoder>
+            <pattern>%logger{12}</pattern>
+        </tagEncoder>
+        <encoder>
+            <pattern>[%-20thread] %msg</pattern>
+        </encoder>
+    </appender>
   <appender name="FILE" class="ch.qos.logback.core.FileAppender">
     <file>/sdcard/TranslatorGame-log.txt</file>
     <append>false</append>
@@ -8,6 +16,7 @@
   </appender>
 
   <root level="DEBUG">
+    <appender-ref ref="logcat" />
     <appender-ref ref="FILE" />
   </root>
 </configuration>
