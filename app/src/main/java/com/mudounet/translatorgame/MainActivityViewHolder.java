@@ -32,6 +32,6 @@ public class MainActivityViewHolder extends RecyclerView.ViewHolder{
     public void bind(MyObject myObject){
         title.setText(myObject.getTitle());
         subtitle.setText(myObject.getSubtitle());
-        image.setImageResource(R.drawable.ic_menu_slideshow);
+        //image.setImageResource(R.drawable.ic_menu_slideshow);
     }
 }
