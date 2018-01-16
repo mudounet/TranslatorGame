@@ -1,5 +1,7 @@
 package com.mudounet.translatorgame;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,11 +19,13 @@ public class MainActivityViewHolder extends RecyclerView.ViewHolder implements V
     private TextView title;
     private TextView subtitle;
     private ImageView image;
+    private final Context context;
 
     //itemView est la vue correspondante à 1 cellule
     public MainActivityViewHolder(View itemView) {
         super(itemView);
 
+        context = itemView.getContext();
         itemView.setOnClickListener(this);
         //c'est ici que l'on fait nos findView
         cv = (CardView)itemView.findViewById(R.id.cv);
@@ -39,6 +43,9 @@ public class MainActivityViewHolder extends RecyclerView.ViewHolder implements V
 
     @Override
     public void onClick(View view) {
-        Toast.makeText(view.getContext(), "position = " + getLayoutPosition() + ", text = "+title.getText(), Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(context, TestActivity.class);
+        intent.putExtra("typeActivity", TypeActivity.TestActivity);
+        intent.putExtra("filename", subtitle.getText());
+        context.startActivity(intent);
     }
 }
