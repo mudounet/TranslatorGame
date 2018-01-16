@@ -5,12 +5,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by guillaume on 16/01/2018.
  */
 
-public class MainActivityViewHolder extends RecyclerView.ViewHolder{
+public class MainActivityViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private CardView cv;
     private TextView title;
@@ -21,6 +22,7 @@ public class MainActivityViewHolder extends RecyclerView.ViewHolder{
     public MainActivityViewHolder(View itemView) {
         super(itemView);
 
+        itemView.setOnClickListener(this);
         //c'est ici que l'on fait nos findView
         cv = (CardView)itemView.findViewById(R.id.cv);
         title = (TextView) itemView.findViewById(R.id.title);
@@ -33,5 +35,10 @@ public class MainActivityViewHolder extends RecyclerView.ViewHolder{
         title.setText(myObject.getTitle());
         subtitle.setText(myObject.getSubtitle());
         //image.setImageResource(R.drawable.ic_menu_slideshow);
+    }
+
+    @Override
+    public void onClick(View view) {
+        Toast.makeText(view.getContext(), "position = " + getLayoutPosition() + ", text = "+title.getText(), Toast.LENGTH_SHORT).show();
     }
 }
