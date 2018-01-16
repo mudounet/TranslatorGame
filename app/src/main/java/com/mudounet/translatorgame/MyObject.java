@@ -5,28 +5,38 @@ package com.mudounet.translatorgame;
  */
 
 public class MyObject {
-    private String text;
-    private String imageUrl;
+    private String title;
+    private String subtitle;
+    private String image;
 
-    public MyObject(String text, String imageUrl) {
-        this.text = text;
-        this.imageUrl = imageUrl;
+    public MyObject(String title, String subtitle, String image) {
+        this.title = title;
+        this.subtitle = subtitle;
+        this.image = image;
     }
 
     //getters & setters
-    public String getText() {
-        return text;
+    public String getTitle() {
+        return title;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getSubtitle() {
+        return subtitle;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
