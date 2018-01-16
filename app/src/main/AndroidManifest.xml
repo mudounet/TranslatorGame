@@ -15,7 +15,7 @@
             android:name=".TestActivity"
             android:label="@string/title_activity_test" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Main.Activity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>

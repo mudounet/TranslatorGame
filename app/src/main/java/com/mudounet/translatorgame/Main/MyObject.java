@@ -1,4 +1,4 @@
-package com.mudounet.translatorgame;
+package com.mudounet.translatorgame.Main;
 
 /**
  * Created by guillaume on 16/01/2018.

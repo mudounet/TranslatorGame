@@ -1,4 +1,4 @@
-package com.mudounet.translatorgame;
+package com.mudounet.translatorgame.Main;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,13 +7,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.mudounet.translatorgame.R;
+import com.mudounet.translatorgame.TestActivity;
+import com.mudounet.translatorgame.TypeActivity;
 
 /**
  * Created by guillaume on 16/01/2018.
  */
 
-public class MainActivityViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class ActivityViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private CardView cv;
     private TextView title;
@@ -22,7 +25,7 @@ public class MainActivityViewHolder extends RecyclerView.ViewHolder implements V
     private final Context context;
 
     //itemView est la vue correspondante à 1 cellule
-    public MainActivityViewHolder(View itemView) {
+    public ActivityViewHolder(View itemView) {
         super(itemView);
 
         context = itemView.getContext();
