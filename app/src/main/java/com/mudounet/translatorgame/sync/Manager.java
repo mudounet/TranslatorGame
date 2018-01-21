@@ -108,6 +108,8 @@ public class Manager {
         remoteConfig.update(config);
         config.save();
 
+        if(!_isBranchDefined(branch, ListBranchCommand.ListMode.REMOTE)) git.push().setCredentialsProvider(credentials).call(); // Create branch in remote if it is not exists.
+
         git.fetch().call();
         git.branchCreate().setName(branch).setStartPoint("origin/" +  branch)
                 .setUpstreamMode(CreateBranchCommand.SetupUpstreamMode.TRACK).setForce(true).call();
