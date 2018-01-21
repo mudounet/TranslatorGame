@@ -2,12 +2,14 @@ package com.mudounet.translatorgame.sync;
 
 import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.BranchTrackingStatus;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
+import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.StoredConfig;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.CredentialsProvider;
@@ -38,11 +40,11 @@ public class Manager {
     private CredentialsProvider credentials;
     private String currentBranch;
 
-    public Manager(File directory, PersonIdent ident) throws IOException, GitAPIException, URISyntaxException {
-       this(directory, ident, null, null);
+    public Manager(File directory, String branch, PersonIdent ident) throws IOException, GitAPIException, URISyntaxException {
+       this(directory, branch, ident, null, null);
     }
 
-    public Manager(File directory, PersonIdent ident, String remoteURL, CredentialsProvider credentials ) throws IOException, GitAPIException, URISyntaxException {
+    public Manager(File directory, String branch, PersonIdent ident, String remoteURL,  CredentialsProvider credentials ) throws IOException, GitAPIException, URISyntaxException {
 
         this.ident = ident;
         Logger.debug("Current directory is "+ directory);
@@ -58,13 +60,36 @@ public class Manager {
             Logger.debug("Repository is not defined yet");
             Logger.debug("Initializing local repository");
             this.git = Git.init().setDirectory(directory).call();
+            this.git.commit().setMessage("Database initialisation").setAuthor(this.ident).call();
         }
 
+        _setLocalBranch(branch);
+
         if(remoteURL != null) {
-            _setRemote(remoteURL, "master", credentials);
+            _setRemote(remoteURL, branch, credentials);
             this.git.pull();
             Logger.debug("Initializing local repository from remote+pull");
         }
+    }
+
+    private boolean _setLocalBranch(String branch) throws IOException, GitAPIException {
+        String curBranch = this.git.getRepository().getBranch();
+        Logger.debug("Branch : "+curBranch);
+        if(curBranch.equals(branch)) return true;
+
+        if (!_isBranchDefined(branch, null)) this.git.branchCreate().setName(branch).call();
+        this.git.checkout().setName(branch).call();
+        this.currentBranch = this.git.getRepository().getBranch();
+        return true;
+    }
+
+    private boolean _isBranchDefined(String branch, ListBranchCommand.ListMode mode) throws GitAPIException {
+        List<Ref> refs = git.branchList().setListMode(mode).call();
+        for(Ref ref : refs) {
+            Logger.debug("Had branch: " + ref.getName());
+            if(ref.getName().equals("refs/heads/"+branch)) return true;
+        }
+        return false;
     }
 
     private boolean _isRemoteAvailable() {
@@ -82,6 +107,8 @@ public class Manager {
 
         remoteConfig.update(config);
         config.save();
+
+        if(!_isBranchDefined(branch, ListBranchCommand.ListMode.REMOTE)) git.push().setCredentialsProvider(credentials).call(); // Create branch in remote if it is not exists.
 
         git.fetch().call();
         git.branchCreate().setName(branch).setStartPoint("origin/" +  branch)
