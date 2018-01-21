@@ -9,6 +9,7 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -157,6 +158,7 @@ public class ManagerTest {
         manager.push();
     }
 
+    @Ignore
     @Test
     public void cancel() throws Exception {
         Manager manager = new Manager(repositoryFolder.getRoot(), TEST_BRANCH, ident);
