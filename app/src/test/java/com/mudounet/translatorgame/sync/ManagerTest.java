@@ -35,6 +35,7 @@ public class ManagerTest {
     String remoteURI;
     CredentialsProvider credentials;
     PersonIdent ident = new PersonIdent("Beautiful NAME", "test@toto.com");
+    String TEST_BRANCH = "TrGameTestBranch";
 
     @Rule
     public TemporaryFolder repositoryFolder= new TemporaryFolder();
@@ -98,7 +99,7 @@ public class ManagerTest {
 
         git.close();
 
-        Manager manager = new Manager(repositoryFolder.getRoot(), ident);
+        Manager manager = new Manager(repositoryFolder.getRoot(), TEST_BRANCH, ident);
 
         assertEquals(sha1, manager.getSha1());
     }
@@ -115,7 +116,7 @@ public class ManagerTest {
 
         git.close();
 
-        Manager manager = new Manager(repositoryFolder.getRoot(), ident, remoteURI, credentials);
+        Manager manager = new Manager(repositoryFolder.getRoot(), TEST_BRANCH, ident, remoteURI, credentials);
 
         assertEquals(sha1, manager.getSha1());
 
@@ -124,14 +125,14 @@ public class ManagerTest {
 
     @Test
     public void pull() throws Exception {
-        Manager manager = new Manager(repositoryFolder.getRoot(), ident, remoteURI, credentials);
+        Manager manager = new Manager(repositoryFolder.getRoot(), TEST_BRANCH, ident, remoteURI, credentials);
 
         manager.pull();
     }
 
     @Test
     public void pullWithoutRemote() throws Exception {
-        Manager manager = new Manager(repositoryFolder.getRoot(), ident);
+        Manager manager = new Manager(repositoryFolder.getRoot(), TEST_BRANCH, ident);
 
         expectedEx.expect(SyncException.class);
         expectedEx.expectMessage("Remote is not configured");
@@ -141,14 +142,14 @@ public class ManagerTest {
 
     @Test
     public void push() throws Exception {
-        Manager manager = new Manager(repositoryFolder.getRoot(), ident, remoteURI, credentials);
+        Manager manager = new Manager(repositoryFolder.getRoot(), TEST_BRANCH, ident, remoteURI, credentials);
 
         manager.push();
     }
 
     @Test
     public void pushWithoutRemote() throws Exception {
-        Manager manager = new Manager(repositoryFolder.getRoot(), ident);
+        Manager manager = new Manager(repositoryFolder.getRoot(), TEST_BRANCH, ident);
 
         expectedEx.expect(SyncException.class);
         expectedEx.expectMessage("Remote is not configured");
@@ -158,7 +159,7 @@ public class ManagerTest {
 
     @Test
     public void cancel() throws Exception {
-        Manager manager = new Manager(repositoryFolder.getRoot(), ident);
+        Manager manager = new Manager(repositoryFolder.getRoot(), TEST_BRANCH, ident);
 
         manager.cancel();
     }
@@ -166,7 +167,7 @@ public class ManagerTest {
     @Test
     public void commit() throws Exception {
         Logger.debug("Test");
-        Manager manager = new Manager(repositoryFolder.getRoot(), ident);
+        Manager manager = new Manager(repositoryFolder.getRoot(), TEST_BRANCH, ident);
 
         Assert.assertFalse(manager.isDirty());
         Assert.assertFalse(_isFileExists("testfile1.txt"));
@@ -191,7 +192,7 @@ public class ManagerTest {
 
     @Test
     public void getFiles() throws Exception {
-        Manager manager = new Manager(repositoryFolder.getRoot(), ident);
+        Manager manager = new Manager(repositoryFolder.getRoot(), TEST_BRANCH, ident);
 
         assertEquals(0, manager.getFiles().length);
 
